@@ -29,7 +29,7 @@ protocol SensorEventProtocol {
 
 	record SensorEventAvro {
 		string id;
-		string hubId;
+		string hub_id;
 		@logicalType("timestamp-millis") long timestamp;
 		union {
 			ClimateSensorAvro,
