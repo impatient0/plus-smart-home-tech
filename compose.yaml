@@ -17,13 +17,32 @@ services:
       KAFKA_LISTENERS: 'PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092'
       CLUSTER_ID: 'K0EA9p0yEe6MkAAAAkKsEg'
 
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.4.3
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: 'http://0.0.0.0:8081'
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:29092'
+
+
   kafka-init-topics:
     image: confluentinc/confluent-local:7.4.3
     container_name: kafka-init-topics
     depends_on:
       - kafka
+      - schema-registry
     command: "bash -c \
-                'kafka-topics --create --topic telemetry.sensors.v1 \
+                'echo Waiting for Kafka to be ready... && \
+                cub kafka-ready -b kafka:29092 1 20 && \
+                echo Kafka is ready! && \
+                kafka-topics --create --topic telemetry.sensors.v1 \
                              --partitions 1 --replication-factor 1 --if-not-exists \
                              --bootstrap-server kafka:29092 && \
                 kafka-topics --create --topic telemetry.snapshots.v1 \
@@ -33,3 +52,16 @@ services:
                              --partitions 1 --replication-factor 1 --if-not-exists \
                              --bootstrap-server kafka:29092'"
     init: true
+
+  collector-service:
+      build: ./telemetry/collector
+      container_name: collector-service
+      depends_on:
+        - kafka
+        - schema-registry
+      ports:
+        - "8080:8080"
+      restart: unless-stopped
+      environment:
+        KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+        KAFKA_SCHEMA_REGISTRY_URL: http://schema-registry:8081
