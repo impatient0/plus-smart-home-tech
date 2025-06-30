@@ -2,14 +2,9 @@ FROM maven:3.9-eclipse-temurin-21 AS builder
 
 WORKDIR /app
 
-COPY ../../pom.xml .
-COPY ../pom.xml ./telemetry/
-COPY ./pom.xml ./telemetry/collector/
+COPY . .
 
-COPY ./src ./telemetry/collector/src
-COPY ../serialization/avro-schemas/src/main/avro ./telemetry/serialization/avro-schemas/src/main/avro
-
-RUN mvn -f ./pom.xml clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 
 FROM eclipse-temurin:21-jre-jammy

@@ -1,0 +1,24 @@
+     # Ignore everything by default
+     **
+
+     # Unignore root POM
+     !pom.xml
+
+     # Unignore modules
+     !telemetry/
+     !infra/
+     !commerce/
+
+     # Reignore built files
+     **/target/
+     **/build/
+
+     # Unignore Maven files
+     !mvnw
+     !mvnw.cmd
+     !.mvn/
+
+     # Reignore IDE files
+     *.git/
+     *.idea/
+     *.iml

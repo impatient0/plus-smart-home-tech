@@ -54,7 +54,9 @@ services:
     init: true
 
   collector-service:
-      build: ./telemetry/collector
+      build:
+        context: .
+        dockerfile: ./telemetry/collector/Dockerfile
       container_name: collector-service
       depends_on:
         - kafka
