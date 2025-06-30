@@ -13,7 +13,7 @@ import ru.yandex.practicum.smarthometech.collector.service.EventProcessingServic
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/events")
+@RequestMapping("/events")
 @RequiredArgsConstructor
 public class EventController {
 
