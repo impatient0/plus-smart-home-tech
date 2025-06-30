@@ -13,5 +13,5 @@ public class DeviceAddedEvent extends HubEvent {
     private String id;
 
     @NotBlank(message = "Type cannot be blank")
-    private String type;
+    private String deviceType;
 }

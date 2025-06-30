@@ -65,6 +65,7 @@ public interface EventMapper {
     @FullEvent
     HubEventAvro toAvro(DeviceAddedEvent dto);
     @Payload
+    @Mapping(target = "type", source = "deviceType")
     DeviceAddedEventAvro toPayload(DeviceAddedEvent dto);
 
     @Mapping(target = "payload", source = "dto", qualifiedBy = Payload.class)
