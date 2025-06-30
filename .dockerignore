@@ -1,24 +1,18 @@
-     # Ignore everything by default
-     **
+# Build artifacts
+**/target/
+**/build/
 
-     # Unignore root POM
-     !pom.xml
+# IDE and OS files
+.idea/
+*.iml
+.DS_Store
+*.log
 
-     # Unignore modules
-     !telemetry/
-     !infra/
-     !commerce/
+# VCS
+.git/
+.gitignore
 
-     # Reignore built files
-     **/target/
-     **/build/
-
-     # Unignore Maven files
-     !mvnw
-     !mvnw.cmd
-     !.mvn/
-
-     # Reignore IDE files
-     *.git/
-     *.idea/
-     *.iml
+# Maven wrapper
+mvnw
+mvnw.cmd
+.mvn/
