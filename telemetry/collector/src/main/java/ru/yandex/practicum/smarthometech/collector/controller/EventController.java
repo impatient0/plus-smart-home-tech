@@ -25,7 +25,7 @@ public class EventController {
         eventProcessingService.processAndSendSensorEvent(event);
     }
 
-    @PostMapping("/events/hubs")
+    @PostMapping("/hubs")
     public void collectHubEvent(@Valid @RequestBody HubEvent event) {
         log.info("Received hub event: {}", event);
         eventProcessingService.processAndSendHubEvent(event);
