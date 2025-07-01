@@ -1,4 +1,4 @@
-package ru.yandex.practicum.smarthometech.collector.service;
+package ru.yandex.practicum.smarthometech.collector.kafka;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

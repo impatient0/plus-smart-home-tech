@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.smarthometech.collector.dto.*;
+import ru.yandex.practicum.smarthometech.collector.kafka.TelemetryKafkaProducer;
 import ru.yandex.practicum.smarthometech.collector.mapper.EventMapper;
 
 @Service
