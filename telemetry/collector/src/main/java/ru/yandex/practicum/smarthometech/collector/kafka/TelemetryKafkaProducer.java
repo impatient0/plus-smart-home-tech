@@ -24,7 +24,9 @@ public class TelemetryKafkaProducer {
     public void sendSensorEvent(SensorEventAvro event) {
         log.info("Sending sensor event to Kafka topic '{}': {}", sensorTopic, event);
 
-        kafkaTemplate.send(sensorTopic, event.getHubId(), event).whenComplete((result, ex) -> {
+        long eventTimestamp = event.getTimestamp().toEpochMilli();
+
+        kafkaTemplate.send(sensorTopic,  null, eventTimestamp, event.getHubId(), event).whenComplete((result, ex) -> {
             if (ex == null) {
                 log.info("Successfully sent sensor event for hubId {} to offset {}",
                     event.getHubId(), result.getRecordMetadata().offset());
@@ -37,7 +39,9 @@ public class TelemetryKafkaProducer {
     public void sendHubEvent(HubEventAvro event) {
         log.info("Sending hub event to Kafka topic '{}': {}", hubTopic, event);
 
-        kafkaTemplate.send(hubTopic, event.getHubId(), event).whenComplete((result, ex) -> {
+        long eventTimestamp = event.getTimestamp().toEpochMilli();
+
+        kafkaTemplate.send(hubTopic, null, eventTimestamp, event.getHubId(), event).whenComplete((result, ex) -> {
             if (ex == null) {
                 log.info("Successfully sent hub event for hubId {} to offset {}",
                     event.getHubId(), result.getRecordMetadata().offset());
