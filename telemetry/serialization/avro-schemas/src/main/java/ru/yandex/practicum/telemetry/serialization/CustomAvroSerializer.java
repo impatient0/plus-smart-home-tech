@@ -1,4 +1,4 @@
-package ru.yandex.practicum.smarthometech.collector.kafka;
+package ru.yandex.practicum.telemetry.serialization;
 
 import org.apache.avro.generic.GenericContainer;
 import org.apache.avro.io.BinaryEncoder;
