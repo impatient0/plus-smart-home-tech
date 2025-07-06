@@ -1,0 +1,18 @@
+# Build artifacts
+**/target/
+**/build/
+
+# IDE and OS files
+.idea/
+*.iml
+.DS_Store
+*.log
+
+# VCS
+.git/
+.gitignore
+
+# Maven wrapper
+mvnw
+mvnw.cmd
+.mvn/
