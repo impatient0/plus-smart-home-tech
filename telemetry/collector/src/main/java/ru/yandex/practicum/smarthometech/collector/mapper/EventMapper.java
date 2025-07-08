@@ -183,7 +183,7 @@ public interface EventMapper {
             case CLIMATE_SENSOR -> DeviceTypeAvro.CLIMATE_SENSOR;
             case SWITCH_SENSOR -> DeviceTypeAvro.SWITCH_SENSOR;
 
-            case DEVICE_TYPE_UNKNOWN, UNRECOGNIZED -> null;
+            case DEVICE_TYPE_UNKNOWN, UNRECOGNIZED -> DeviceTypeAvro.MOTION_SENSOR;
         };
     }
 
