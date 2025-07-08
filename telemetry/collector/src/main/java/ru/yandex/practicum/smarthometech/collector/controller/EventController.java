@@ -1,34 +1,80 @@
 package ru.yandex.practicum.smarthometech.collector.controller;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import com.google.protobuf.Empty;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
+import io.grpc.stub.StreamObserver;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.smarthometech.collector.dto.HubEvent;
-import ru.yandex.practicum.smarthometech.collector.dto.SensorEvent;
-import ru.yandex.practicum.smarthometech.collector.service.EventProcessingService;
+import net.devh.boot.grpc.server.service.GrpcService;
+import ru.yandex.practicum.grpc.telemetry.collector.CollectorControllerGrpc.CollectorControllerImplBase;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto.PayloadCase;
+import ru.yandex.practicum.smarthometech.collector.handler.HubEventHandler;
+import ru.yandex.practicum.smarthometech.collector.handler.SensorEventHandler;
 
+@GrpcService
 @Slf4j
-@RestController
-@RequestMapping("/events")
-@RequiredArgsConstructor
-public class EventController {
+public class EventController extends CollectorControllerImplBase {
 
-    private final EventProcessingService eventProcessingService;
+    private final Map<PayloadCase, SensorEventHandler> sensorEventHandlers;
+    private final Map<HubEventProto.PayloadCase, HubEventHandler> hubEventHandlers;
 
-    @PostMapping("/sensors")
-    public void handleSensorEvent(@Valid @RequestBody SensorEvent event) {
-        log.info("Received sensor event: {}", event);
-        eventProcessingService.processAndSendSensorEvent(event);
+    public EventController(Set<SensorEventHandler> sensorEventHandlers,
+        Set<HubEventHandler> hubEventHandlers) {
+        this.sensorEventHandlers = sensorEventHandlers.stream()
+            .collect(Collectors.toMap(SensorEventHandler::getHandledType, Function.identity()));
+        this.hubEventHandlers = hubEventHandlers.stream()
+            .collect(Collectors.toMap(HubEventHandler::getHandledType, Function.identity()));
     }
 
-    @PostMapping("/hubs")
-    public void collectHubEvent(@Valid @RequestBody HubEvent event) {
-        log.info("Received hub event: {}", event);
-        eventProcessingService.processAndSendHubEvent(event);
+    @Override
+    public void collectSensorEvent(SensorEventProto request, StreamObserver<Empty> responseObserver) {
+        try {
+            SensorEventHandler handler = sensorEventHandlers.get(request.getPayloadCase());
+
+            if (handler == null) {
+                throw new StatusRuntimeException(Status.UNIMPLEMENTED);
+            }
+
+            sensorEventHandlers.get(request.getPayloadCase()).process(request);
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+        } catch (Exception e) {
+            responseObserver.onError(new StatusRuntimeException(
+                Status.INTERNAL
+                    .withDescription(e.getLocalizedMessage())
+                    .withCause(e)
+            ));
+        }
     }
 
+    @Override
+    public void collectHubEvent(HubEventProto request, StreamObserver<Empty> responseObserver) {
+        try {
+            HubEventHandler handler = hubEventHandlers.get(request.getPayloadCase());
+
+            if (handler == null) {
+                throw new StatusRuntimeException(Status.UNIMPLEMENTED);
+            }
+
+            hubEventHandlers.get(request.getPayloadCase()).process(request);
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+        } catch (Exception e) {
+            responseObserver.onError(new StatusRuntimeException(
+                Status.INTERNAL
+                    .withDescription(e.getLocalizedMessage())
+                    .withCause(e)
+            ));
+        }
+    }
 }
