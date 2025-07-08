@@ -79,8 +79,8 @@ message DeviceActionProto {
 
 message ScenarioAddedEventProto {
   string name = 1;
-  repeated ScenarioConditionProto condition = 2;
-  repeated DeviceActionProto action = 3;
+  repeated ScenarioConditionProto conditions = 2;
+  repeated DeviceActionProto actions = 3;
 }
 
 message ScenarioRemovedEventProto {
