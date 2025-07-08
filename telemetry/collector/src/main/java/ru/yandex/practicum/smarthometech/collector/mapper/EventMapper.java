@@ -4,6 +4,7 @@ import java.time.Instant;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.Mappings;
 import org.mapstruct.ValueMapping;
 import org.mapstruct.ValueMappings;
 import ru.yandex.practicum.grpc.telemetry.event.*;
@@ -71,6 +72,11 @@ public interface EventMapper {
                 throw new IllegalArgumentException("Unknown payload case: " + proto.getPayloadCase());
 
         };
+
+        if (avroPayload == null) {
+            return null;
+        }
+
         return HubEventAvro.newBuilder()
             .setHubId(proto.getHubId())
             .setTimestamp(Instant.ofEpochSecond(
@@ -83,26 +89,111 @@ public interface EventMapper {
 
     // --- Helper methods for Proto -> Avro payload mapping ---
 
-    @ValueMappings({
-        @ValueMapping(source = "DEVICE_TYPE_UNKNOWN", target = MappingConstants.THROW_EXCEPTION),
-        @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.THROW_EXCEPTION)
-    })
-    DeviceAddedEventAvro toAvro(DeviceAddedEventProto proto);
-    @ValueMappings({
-        @ValueMapping(source = "DEVICE_TYPE_UNKNOWN", target = MappingConstants.THROW_EXCEPTION),
-        @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.THROW_EXCEPTION)
-    })
+    default DeviceAddedEventAvro toAvro(DeviceAddedEventProto proto) {
+        if (proto == null) {
+            return null;
+        }
+
+        DeviceTypeAvro avroType = toAvro(proto.getType());
+
+        if (avroType == null) {
+            return null;
+        }
+
+        return DeviceAddedEventAvro.newBuilder()
+            .setId(proto.getId())
+            .setType(avroType)
+            .build();
+    }
+
     DeviceRemovedEventAvro toAvro(DeviceRemovedEventProto proto);
-    @ValueMappings({
-        @ValueMapping(source = "DEVICE_TYPE_UNKNOWN", target = MappingConstants.THROW_EXCEPTION),
-        @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.THROW_EXCEPTION)
+    @Mappings({
+        @Mapping(source = "conditionsList", target = "conditions"),
+        @Mapping(source = "actionsList", target = "actions")
     })
     ScenarioAddedEventAvro toAvro(ScenarioAddedEventProto proto);
-    @ValueMappings({
-        @ValueMapping(source = "DEVICE_TYPE_UNKNOWN", target = MappingConstants.THROW_EXCEPTION),
-        @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.THROW_EXCEPTION)
-    })
     ScenarioRemovedEventAvro toAvro(ScenarioRemovedEventProto proto);
+
+    default ScenarioConditionAvro toAvro(ScenarioConditionProto proto) {
+        if (proto == null) {
+            return null;
+        }
+
+        Object value = switch (proto.getValueCase()) {
+            case BOOL_VALUE -> proto.getBoolValue();
+            case INT_VALUE -> proto.getIntValue();
+            case VALUE_NOT_SET -> null;
+        };
+
+        return ScenarioConditionAvro.newBuilder()
+            .setSensorId(proto.getSensorId())
+            .setType(toAvro(proto.getType()))
+            .setOperation(toAvro(proto.getOperation()))
+            .setValue(value)
+            .build();
+    }
+
+    default ConditionTypeAvro toAvro(ConditionTypeProto proto) {
+        if (proto == null) {
+            return null;
+        }
+
+        return switch (proto) {
+            case MOTION -> ConditionTypeAvro.MOTION;
+            case LUMINOSITY -> ConditionTypeAvro.LUMINOSITY;
+            case SWITCH -> ConditionTypeAvro.SWITCH;
+            case TEMPERATURE -> ConditionTypeAvro.TEMPERATURE;
+            case CO2LEVEL -> ConditionTypeAvro.CO2LEVEL;
+            case HUMIDITY -> ConditionTypeAvro.HUMIDITY;
+
+            case CONDITION_TYPE_UNKNOWN, UNRECOGNIZED -> null;
+        };
+    }
+
+    default ConditionOperationAvro toAvro(ConditionOperationProto proto) {
+        if (proto == null) {
+            return null;
+        }
+
+        return switch (proto) {
+            case EQUALS -> ConditionOperationAvro.EQUALS;
+            case GREATER_THAN -> ConditionOperationAvro.GREATER_THAN;
+            case LOWER_THAN -> ConditionOperationAvro.LOWER_THAN;
+
+            case CONDITION_OPERATION_UNKNOWN, UNRECOGNIZED -> null;
+        };
+    }
+
+    default ActionTypeAvro toAvro(ActionTypeProto proto) {
+        if (proto == null) {
+            return null;
+        }
+
+        return switch (proto) {
+            case ACTIVATE -> ActionTypeAvro.ACTIVATE;
+            case DEACTIVATE -> ActionTypeAvro.DEACTIVATE;
+            case INVERSE -> ActionTypeAvro.INVERSE;
+            case SET_VALUE -> ActionTypeAvro.SET_VALUE;
+
+            case ACTION_TYPE_UNKNOWN, UNRECOGNIZED -> null;
+        };
+    }
+
+    default DeviceTypeAvro toAvro(DeviceTypeProto proto) {
+        if (proto == null) {
+            return null;
+        }
+
+        return switch (proto) {
+            case MOTION_SENSOR -> DeviceTypeAvro.MOTION_SENSOR;
+            case TEMPERATURE_SENSOR -> DeviceTypeAvro.TEMPERATURE_SENSOR;
+            case LIGHT_SENSOR -> DeviceTypeAvro.LIGHT_SENSOR;
+            case CLIMATE_SENSOR -> DeviceTypeAvro.CLIMATE_SENSOR;
+            case SWITCH_SENSOR -> DeviceTypeAvro.SWITCH_SENSOR;
+
+            case DEVICE_TYPE_UNKNOWN, UNRECOGNIZED -> null;
+        };
+    }
 
     // --- SENSOR EVENT AVRO <-> DTO MAPPERS ---
 
