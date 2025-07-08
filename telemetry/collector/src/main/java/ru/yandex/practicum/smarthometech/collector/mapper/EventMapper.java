@@ -28,8 +28,6 @@ public interface EventMapper {
             case SWITCH_SENSOR_EVENT -> toAvro(proto.getSwitchSensorEvent());
             case PAYLOAD_NOT_SET ->
                 throw new IllegalArgumentException("SensorEventProto payload is not set.");
-            default ->
-                throw new IllegalArgumentException("Unknown payload case: " + proto.getPayloadCase());
         };
 
         return SensorEventAvro.newBuilder()
@@ -65,9 +63,6 @@ public interface EventMapper {
             case SCENARIO_REMOVED -> toAvro(proto.getScenarioRemoved());
             case PAYLOAD_NOT_SET ->
                 throw new IllegalArgumentException("HubEventProto payload is not set.");
-            default ->
-                throw new IllegalArgumentException("Unknown payload case: " + proto.getPayloadCase());
-
         };
 
         if (avroPayload == null) {
