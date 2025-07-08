@@ -81,23 +81,7 @@ public interface EventMapper {
 
     // --- Helper methods for Proto -> Avro payload mapping ---
 
-    default DeviceAddedEventAvro toAvro(DeviceAddedEventProto proto) {
-        if (proto == null) {
-            return null;
-        }
-
-        DeviceTypeAvro avroType = toAvro(proto.getType());
-
-        if (avroType == null) {
-            return null;
-        }
-
-        return DeviceAddedEventAvro.newBuilder()
-            .setId(proto.getId())
-            .setType(avroType)
-            .build();
-    }
-
+    DeviceAddedEventAvro toAvro(DeviceAddedEventProto proto);
     DeviceRemovedEventAvro toAvro(DeviceRemovedEventProto proto);
     @Mappings({
         @Mapping(source = "conditionsList", target = "conditions"),
@@ -138,7 +122,7 @@ public interface EventMapper {
             case CO2LEVEL -> ConditionTypeAvro.CO2LEVEL;
             case HUMIDITY -> ConditionTypeAvro.HUMIDITY;
 
-            case CONDITION_TYPE_UNKNOWN, UNRECOGNIZED -> null;
+            case CONDITION_TYPE_UNKNOWN, UNRECOGNIZED -> ConditionTypeAvro.MOTION;
         };
     }
 
@@ -152,7 +136,7 @@ public interface EventMapper {
             case GREATER_THAN -> ConditionOperationAvro.GREATER_THAN;
             case LOWER_THAN -> ConditionOperationAvro.LOWER_THAN;
 
-            case CONDITION_OPERATION_UNKNOWN, UNRECOGNIZED -> null;
+            case CONDITION_OPERATION_UNKNOWN, UNRECOGNIZED -> ConditionOperationAvro.EQUALS;
         };
     }
 
@@ -167,7 +151,7 @@ public interface EventMapper {
             case INVERSE -> ActionTypeAvro.INVERSE;
             case SET_VALUE -> ActionTypeAvro.SET_VALUE;
 
-            case ACTION_TYPE_UNKNOWN, UNRECOGNIZED -> null;
+            case ACTION_TYPE_UNKNOWN, UNRECOGNIZED -> ActionTypeAvro.ACTIVATE;
         };
     }
 
