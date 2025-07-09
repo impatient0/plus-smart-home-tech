@@ -111,13 +111,13 @@ public interface EventMapper {
             .build();
     }
 
-    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.NULL)
+    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.THROW_EXCEPTION)
     ConditionTypeAvro toAvro(ConditionTypeProto proto);
-    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.NULL)
+    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.THROW_EXCEPTION)
     ConditionOperationAvro toAvro(ConditionOperationProto proto);
-    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.NULL)
+    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.THROW_EXCEPTION)
     DeviceTypeAvro toAvro(DeviceTypeProto proto);
-    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.NULL)
+    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.THROW_EXCEPTION)
     ActionTypeAvro toAvro(ActionTypeProto proto);
 
 
