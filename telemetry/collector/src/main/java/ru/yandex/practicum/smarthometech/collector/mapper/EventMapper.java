@@ -3,7 +3,9 @@ package ru.yandex.practicum.smarthometech.collector.mapper;
 import java.time.Instant;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.Mappings;
+import org.mapstruct.ValueMapping;
 import ru.yandex.practicum.grpc.telemetry.event.*;
 import ru.yandex.practicum.kafka.telemetry.event.*;
 import ru.yandex.practicum.smarthometech.collector.dto.*;
@@ -109,67 +111,15 @@ public interface EventMapper {
             .build();
     }
 
-    default ConditionTypeAvro toAvro(ConditionTypeProto proto) {
-        if (proto == null) {
-            return null;
-        }
+    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.NULL)
+    ConditionTypeAvro toAvro(ConditionTypeProto proto);
+    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.NULL)
+    ConditionOperationAvro toAvro(ConditionOperationProto proto);
+    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.NULL)
+    DeviceTypeAvro toAvro(DeviceTypeProto proto);
+    @ValueMapping(source = "UNRECOGNIZED", target = MappingConstants.NULL)
+    ActionTypeAvro toAvro(ActionTypeProto proto);
 
-        return switch (proto) {
-            case MOTION -> ConditionTypeAvro.MOTION;
-            case LUMINOSITY -> ConditionTypeAvro.LUMINOSITY;
-            case SWITCH -> ConditionTypeAvro.SWITCH;
-            case TEMPERATURE -> ConditionTypeAvro.TEMPERATURE;
-            case CO2LEVEL -> ConditionTypeAvro.CO2LEVEL;
-            case HUMIDITY -> ConditionTypeAvro.HUMIDITY;
-
-            case CONDITION_TYPE_UNKNOWN, UNRECOGNIZED -> ConditionTypeAvro.MOTION;
-        };
-    }
-
-    default ConditionOperationAvro toAvro(ConditionOperationProto proto) {
-        if (proto == null) {
-            return null;
-        }
-
-        return switch (proto) {
-            case EQUALS -> ConditionOperationAvro.EQUALS;
-            case GREATER_THAN -> ConditionOperationAvro.GREATER_THAN;
-            case LOWER_THAN -> ConditionOperationAvro.LOWER_THAN;
-
-            case CONDITION_OPERATION_UNKNOWN, UNRECOGNIZED -> ConditionOperationAvro.EQUALS;
-        };
-    }
-
-    default ActionTypeAvro toAvro(ActionTypeProto proto) {
-        if (proto == null) {
-            return null;
-        }
-
-        return switch (proto) {
-            case ACTIVATE -> ActionTypeAvro.ACTIVATE;
-            case DEACTIVATE -> ActionTypeAvro.DEACTIVATE;
-            case INVERSE -> ActionTypeAvro.INVERSE;
-            case SET_VALUE -> ActionTypeAvro.SET_VALUE;
-
-            case ACTION_TYPE_UNKNOWN, UNRECOGNIZED -> ActionTypeAvro.ACTIVATE;
-        };
-    }
-
-    default DeviceTypeAvro toAvro(DeviceTypeProto proto) {
-        if (proto == null) {
-            return null;
-        }
-
-        return switch (proto) {
-            case MOTION_SENSOR -> DeviceTypeAvro.MOTION_SENSOR;
-            case TEMPERATURE_SENSOR -> DeviceTypeAvro.TEMPERATURE_SENSOR;
-            case LIGHT_SENSOR -> DeviceTypeAvro.LIGHT_SENSOR;
-            case CLIMATE_SENSOR -> DeviceTypeAvro.CLIMATE_SENSOR;
-            case SWITCH_SENSOR -> DeviceTypeAvro.SWITCH_SENSOR;
-
-            case DEVICE_TYPE_UNKNOWN, UNRECOGNIZED -> DeviceTypeAvro.MOTION_SENSOR;
-        };
-    }
 
     // --- SENSOR EVENT AVRO <-> DTO MAPPERS ---
 
