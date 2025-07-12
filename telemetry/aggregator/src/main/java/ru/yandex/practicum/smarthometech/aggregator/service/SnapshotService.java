@@ -9,9 +9,9 @@ public interface SnapshotService {
     /**
      * Processes a single sensor event and updates the corresponding hub's snapshot if necessary.
      *
-     * @param event The incoming sensor event from Kafka.
+     * @param event The SensorEvent object.
      * @return An Optional containing the updated snapshot if a change was made,
-     *         or an empty Optional if the event was old, a duplicate, or didn't change the state.
+     *         or an empty Optional otherwise.
      */
     public Optional<SensorsSnapshotAvro> updateState(SensorEventAvro event);
 
