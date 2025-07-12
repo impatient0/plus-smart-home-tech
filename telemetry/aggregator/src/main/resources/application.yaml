@@ -7,7 +7,7 @@ spring:
       value-deserializer: ru.yandex.practicum.kafka.telemetry.deserializer.SensorEventDeserializer
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
-      value-serializer: ru.yandex.practicum.kafka.telemetry.serializer.SnapshotSerializer
+      value-serializer: ru.yandex.practicum.kafka.telemetry.serializer.SensorSnapshotAvroSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 kafka:
