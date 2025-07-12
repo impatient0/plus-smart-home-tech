@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.serializer;
+package ru.yandex.practicum.kafka.telemetry.serializer;
 
 import org.apache.avro.generic.GenericContainer;
 import org.apache.avro.io.BinaryEncoder;

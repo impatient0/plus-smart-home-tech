@@ -8,7 +8,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
-import ru.yandex.practicum.telemetry.serializer.BaseAvroSerializer;
+import ru.yandex.practicum.kafka.telemetry.serializer.BaseAvroSerializer;
 
 @Slf4j
 @Component

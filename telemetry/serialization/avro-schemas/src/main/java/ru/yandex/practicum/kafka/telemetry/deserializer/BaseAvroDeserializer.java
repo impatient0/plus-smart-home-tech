@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.deserializer;
+package ru.yandex.practicum.kafka.telemetry.deserializer;
 
 import java.io.IOException;
 import java.util.Arrays;
