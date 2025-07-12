@@ -1,4 +1,4 @@
-# Stage 1: Build application
+# Stage 1: Build the application
 FROM maven:3.9-eclipse-temurin-21 AS builder
 
 WORKDIR /app
@@ -16,20 +16,17 @@ RUN mvn install -N -f telemetry/serialization/pom.xml
 COPY telemetry/serialization/avro-schemas ./telemetry/serialization/avro-schemas
 RUN mvn install -f telemetry/serialization/avro-schemas/pom.xml -DskipTests
 
-COPY telemetry/serialization/proto-schemas ./telemetry/serialization/proto-schemas
-RUN mvn install -f telemetry/serialization/proto-schemas/pom.xml -DskipTests
-
-# Build the collector application
-COPY telemetry/collector ./telemetry/collector
-RUN mvn package -f telemetry/collector/pom.xml -DskipTests
+# Build the aggregator application
+COPY telemetry/aggregator ./telemetry/aggregator
+RUN mvn package -f telemetry/aggregator/pom.xml -DskipTests
 
 # Stage 2: Create image
 FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
-COPY --from=builder /app/telemetry/collector/target/*.jar app.jar
+COPY --from=builder /app/telemetry/aggregator/target/*.jar app.jar
 
-EXPOSE 9090
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

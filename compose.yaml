@@ -1,6 +1,6 @@
 services:
   kafka:
-    image: confluentinc/confluent-local:7.4.3
+    image: confluentinc/confluent-local:7.5.0
     hostname: kafka
     container_name: kafka
     ports:
@@ -16,16 +16,21 @@ services:
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:29093'
       KAFKA_LISTENERS: 'PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092'
       CLUSTER_ID: 'K0EA9p0yEe6MkAAAAkKsEg'
+    healthcheck:
+      test: [ "CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list" ]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+      start_period: 5s
 
   kafka-init-topics:
-    image: confluentinc/confluent-local:7.4.3
+    image: confluentinc/confluent-local:7.5.0
     container_name: kafka-init-topics
     depends_on:
-      - kafka
+      kafka:
+          condition: service_healthy
     command: "bash -c \
-                'echo Waiting for Kafka to be ready... && \
-                cub kafka-ready -b kafka:29092 1 20 && \
-                echo Kafka is ready! && \
+                'echo Kafka is healthy, creating topics... && \
                 kafka-topics --create --topic telemetry.sensors.v1 \
                              --partitions 1 --replication-factor 1 --if-not-exists \
                              --bootstrap-server kafka:29092 && \
@@ -37,11 +42,39 @@ services:
                              --bootstrap-server kafka:29092'"
     init: true
 
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.5.0
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:29092'
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: 'http://0.0.0.0:8081'
+    restart: unless-stopped
+
   collector-service:
       build:
         context: .
         dockerfile: ./telemetry/collector/Dockerfile
       container_name: collector-service
+      depends_on:
+        - kafka
+      ports:
+        - "9090:9090"
+      restart: unless-stopped
+      environment:
+        KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+        KAFKA_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+
+  aggregator-service:
+      build:
+        context: .
+        dockerfile: ./telemetry/aggregator/Dockerfile
+      container_name: aggregator-service
       depends_on:
         - kafka
       ports:
