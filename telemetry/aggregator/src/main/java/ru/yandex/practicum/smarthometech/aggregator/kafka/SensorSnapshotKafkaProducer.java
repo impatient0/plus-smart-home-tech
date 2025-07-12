@@ -19,6 +19,15 @@ public class SensorSnapshotKafkaProducer {
 
     public void send(SensorsSnapshotAvro snapshot) {
         log.info("Producing new snapshot for hubId: {}", snapshot.getHubId());
-        kafkaTemplate.send(snapshotsTopic, snapshot.getHubId(), snapshot);
+        kafkaTemplate.send(snapshotsTopic, snapshot.getHubId(), snapshot)
+            .whenComplete((result, ex) -> {
+                if (ex == null) {
+                    log.info("Successfully sent new snapshot for hubId {} to offset {}",
+                        snapshot.getHubId(), result.getRecordMetadata().offset());
+                } else {
+                    log.error("Failed to send new snapshot for hubId {}: {}", snapshot.getHubId(),
+                        ex.getMessage());
+                }
+            });
     }
 }

@@ -22,7 +22,7 @@ public class SensorEventKafkaListener {
     public void consume(SensorEventAvro event) {
         log.debug("Received sensor event: {}", event);
 
-        snapshotService.updateState(event)
-            .ifPresent(snapshotProducer::send);
+        snapshotService.updateState(event).ifPresentOrElse(snapshotProducer::send,
+            () -> log.debug("New snapshot was not created."));
     }
 }

@@ -31,14 +31,16 @@ public class TelemetryKafkaProducer {
         byte[] eventBytes = avroSerializer.serialize(sensorTopic, event);
         long eventTimestamp = event.getTimestamp().toEpochMilli();
 
-        kafkaTemplate.send(sensorTopic,  null, eventTimestamp, event.getHubId(), eventBytes).whenComplete((result, ex) -> {
-            if (ex == null) {
-                log.info("Successfully sent sensor event for hubId {} to offset {}",
-                    event.getHubId(), result.getRecordMetadata().offset());
-            } else {
-                log.error("Failed to send sensor event for hubId {}: {}", event.getHubId(), ex.getMessage());
-            }
-        });
+        kafkaTemplate.send(sensorTopic, null, eventTimestamp, event.getHubId(), eventBytes)
+            .whenComplete((result, ex) -> {
+                if (ex == null) {
+                    log.info("Successfully sent sensor event for hubId {} to offset {}",
+                        event.getHubId(), result.getRecordMetadata().offset());
+                } else {
+                    log.error("Failed to send sensor event for hubId {}: {}", event.getHubId(),
+                        ex.getMessage());
+                }
+            });
     }
 
     public void sendHubEvent(HubEventAvro event) {
@@ -47,13 +49,15 @@ public class TelemetryKafkaProducer {
         byte[] eventBytes = avroSerializer.serialize(hubTopic, event);
         long eventTimestamp = event.getTimestamp().toEpochMilli();
 
-        kafkaTemplate.send(hubTopic, null, eventTimestamp, event.getHubId(), eventBytes).whenComplete((result, ex) -> {
-            if (ex == null) {
-                log.info("Successfully sent hub event for hubId {} to offset {}",
-                    event.getHubId(), result.getRecordMetadata().offset());
-            } else {
-                log.error("Failed to send hub event for hubId {}: {}", event.getHubId(), ex.getMessage());
-            }
-        });
+        kafkaTemplate.send(hubTopic, null, eventTimestamp, event.getHubId(), eventBytes)
+            .whenComplete((result, ex) -> {
+                if (ex == null) {
+                    log.info("Successfully sent hub event for hubId {} to offset {}",
+                        event.getHubId(), result.getRecordMetadata().offset());
+                } else {
+                    log.error("Failed to send hub event for hubId {}: {}", event.getHubId(),
+                        ex.getMessage());
+                }
+            });
     }
 }
