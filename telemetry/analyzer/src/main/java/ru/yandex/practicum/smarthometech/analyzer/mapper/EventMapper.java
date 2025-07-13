@@ -4,6 +4,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.yandex.practicum.grpc.telemetry.event.ActionTypeProto;
+import ru.yandex.practicum.grpc.telemetry.event.DeviceActionProto;
 import ru.yandex.practicum.kafka.telemetry.event.ActionTypeAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ConditionTypeAvro;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceActionAvro;
@@ -20,7 +22,25 @@ import ru.yandex.practicum.smarthometech.analyzer.domain.entity.Sensor;
 @Mapper(componentModel = "spring")
 public interface EventMapper {
 
-    // --- SCENARIO MAPPING ---
+    // --- ACTION ENTITY -> PROTO MAPPER ---
+
+    default DeviceActionProto toProto(Action action, Sensor sensor) {
+        if (action == null || sensor == null) {
+            return null;
+        }
+
+        DeviceActionProto.Builder builder = DeviceActionProto.newBuilder()
+            .setSensorId(sensor.getId())
+            .setType(actionTypeToProto(action.getType()));
+
+        if (action.getValue() != null) {
+            builder.setValue(action.getValue());
+        }
+
+        return builder.build();
+    }
+
+    // --- SCENARIO AVRO -> ENTITY MAPPER ---
 
     default Scenario toScenarioEntity(String hubId, ScenarioAddedEventAvro event) {
         if (event == null) {
@@ -56,13 +76,13 @@ public interface EventMapper {
         return scenario;
     }
 
-    // --- SENSOR MAPPING ---
+    // --- SENSOR AVRO -> ENTITY MAPPER ---
 
     @Mapping(target = "id", source = "event.id")
     @Mapping(target = "hubId", source = "hubId")
     Sensor toSensorEntity(String hubId, DeviceAddedEventAvro event);
 
-    // --- HELPER MAPPINGS ---
+    // --- Helper methods ---
 
     @Mapping(target = "id", source = "sensorId")
     @Mapping(target = "hubId", ignore = true)
@@ -75,5 +95,16 @@ public interface EventMapper {
     String conditionTypeToString(ConditionTypeAvro avroEnum);
 
     String actionTypeToString(ActionTypeAvro avroEnum);
+
+    default ActionTypeProto actionTypeToProto(String actionType) {
+        if (actionType == null) {
+            return ActionTypeProto.UNRECOGNIZED;
+        }
+        try {
+            return ActionTypeProto.valueOf(actionType);
+        } catch (IllegalArgumentException e) {
+            return ActionTypeProto.UNRECOGNIZED;
+        }
+    }
 
 }
