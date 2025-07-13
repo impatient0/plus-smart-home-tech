@@ -26,17 +26,9 @@ public class Scenario {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(name = "scenario_conditions",
-        joinColumns = @JoinColumn(name = "scenario_id"),
-        inverseJoinColumns = @JoinColumn(name = "condition_id")
-    )
-    private Set<Condition> conditions = new HashSet<>();
+    @OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ScenarioCondition> scenarioConditions = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(name = "scenario_actions",
-        joinColumns = @JoinColumn(name = "scenario_id"),
-        inverseJoinColumns = @JoinColumn(name = "action_id")
-    )
-    private Set<Action> actions = new HashSet<>();
+    @OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ScenarioAction> scenarioActions = new HashSet<>();
 }
