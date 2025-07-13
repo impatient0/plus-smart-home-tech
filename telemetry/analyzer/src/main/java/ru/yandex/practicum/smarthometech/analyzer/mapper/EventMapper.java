@@ -107,4 +107,28 @@ public interface EventMapper {
         }
     }
 
+    default Integer objectToInteger(Object avroValue) {
+        switch (avroValue) {
+            case Integer i -> {
+                return i;
+            }
+            case Long l -> {
+                return l.intValue();
+            }
+            case Boolean b -> {
+                return b ? 1 : 0;
+            }
+            case CharSequence charSequence -> {
+                try {
+                    return Integer.parseInt(charSequence.toString());
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }
+            case null, default -> {
+                return null;
+            }
+        }
+    }
+
 }
