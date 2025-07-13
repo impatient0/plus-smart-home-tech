@@ -11,7 +11,7 @@ spring:
         max.poll.records: 100
         max.poll.interval.ms: 30000
     producer:
-      value-serializer: ru.yandex.practicum.kafka.telemetry.serializer.SensorSnapshotAvroSerializer
+      value-serializer: ru.yandex.practicum.kafka.telemetry.serializer.SensorSnapshotSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 kafka:
