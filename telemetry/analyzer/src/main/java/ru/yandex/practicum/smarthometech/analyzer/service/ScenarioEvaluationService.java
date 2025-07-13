@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
+import ru.yandex.practicum.smarthometech.analyzer.client.HubRouterClient;
 import ru.yandex.practicum.smarthometech.analyzer.domain.entity.Scenario;
 import ru.yandex.practicum.smarthometech.analyzer.domain.entity.ScenarioCondition;
 import ru.yandex.practicum.smarthometech.analyzer.repository.ScenarioRepository;
@@ -18,8 +19,7 @@ public class ScenarioEvaluationService {
 
     private final ScenarioRepository scenarioRepository;
     private final ConditionEvaluator conditionEvaluator;
-    // TODO: gRPC client integration
-    // private final HubRouterClient hubRouterClient;
+    private final HubRouterClient hubRouterClient;
 
     public void evaluate(SensorsSnapshotAvro snapshot) {
         String hubId = snapshot.getHubId();
@@ -31,8 +31,8 @@ public class ScenarioEvaluationService {
             .filter(scenario -> allConditionsMet(scenario, snapshot))
             .flatMap(scenario -> scenario.getScenarioActions().stream())
             .forEach(action -> {
-                // TODO: gRPC client integration
-                // hubRouterClient.executeAction(hubId, scenario.getName(), action);
+                hubRouterClient.executeAction(hubId, action.getScenario().getName(),
+                    action.getSensor(), action.getAction());
             });
     }
 
