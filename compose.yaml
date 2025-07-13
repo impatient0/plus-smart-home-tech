@@ -47,7 +47,8 @@ services:
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     ports:
       - "8081:8081"
     environment:
@@ -56,13 +57,33 @@ services:
       SCHEMA_REGISTRY_LISTENERS: 'http://0.0.0.0:8081'
     restart: unless-stopped
 
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: smart_home_tech
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d smart_home_tech" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   collector-service:
       build:
         context: .
         dockerfile: ./telemetry/collector/Dockerfile
       container_name: collector-service
       depends_on:
-        - kafka
+        kafka:
+          condition: service_healthy
       ports:
         - "9090:9090"
       restart: unless-stopped
@@ -76,10 +97,31 @@ services:
         dockerfile: ./telemetry/aggregator/Dockerfile
       container_name: aggregator-service
       depends_on:
-        - kafka
+        kafka:
+          condition: service_healthy
       ports:
         - "8080:8080"
       restart: unless-stopped
       environment:
+        KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+        KAFKA_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+
+  analyzer-service:
+      build:
+        context: .
+        dockerfile: ./telemetry/analyzer/Dockerfile
+      container_name: analyzer-service
+      depends_on:
+        kafka:
+          condition: service_healthy
+        postgres:
+          condition: service_healthy
+      ports:
+        - "8082:8082"
+      restart: unless-stopped
+      environment:
+        DATASOURCE_URL: jdbc:postgresql://postgres:5432/smart_home_tech
+        DATASOURCE_USERNAME: postgres
+        DATASOURCE_PASSWORD: postgres
         KAFKA_BOOTSTRAP_SERVERS: kafka:29092
         KAFKA_SCHEMA_REGISTRY_URL: http://schema-registry:8081
