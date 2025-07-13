@@ -1,5 +1,3 @@
--- This script will be executed automatically on the first run of the 'postgres' container.
-
 -- создаём таблицу scenarios
 CREATE TABLE IF NOT EXISTS scenarios (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
