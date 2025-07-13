@@ -12,6 +12,7 @@ import ru.yandex.practicum.kafka.telemetry.event.ScenarioRemovedEventAvro;
 import ru.yandex.practicum.smarthometech.analyzer.mapper.EventMapper;
 import ru.yandex.practicum.smarthometech.analyzer.repository.ScenarioRepository;
 import ru.yandex.practicum.smarthometech.analyzer.repository.SensorRepository;
+import ru.yandex.practicum.smarthometech.analyzer.service.ScenarioManagementService;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class HubEventKafkaListener {
 
     private final SensorRepository sensorRepository;
     private final ScenarioRepository scenarioRepository;
-
+    private final ScenarioManagementService scenarioService;
     private final EventMapper eventMapper;
 
     @KafkaListener(topics = "${kafka.topic.hubs}", groupId = "analyzer-hubs-group")
@@ -36,7 +37,7 @@ public class HubEventKafkaListener {
                 sensorRepository.deleteById(removed.getId());
             }
             case ScenarioAddedEventAvro added -> {
-                scenarioRepository.save(eventMapper.toScenarioEntity(event.getHubId(), added));
+                scenarioService.saveOrUpdateScenario(event);
             }
             case ScenarioRemovedEventAvro removed -> {
                 scenarioRepository.findByHubIdAndName(event.getHubId(), removed.getName())
