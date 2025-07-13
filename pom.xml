@@ -31,6 +31,7 @@
         <protobuf.version>3.23.4</protobuf.version>
         <grpc.version>1.73.0</grpc.version>
         <mapstruct.version>1.6.3</mapstruct.version>
+        <postgresql.version>42.7.7</postgresql.version>
 
         <!--       Plugins       -->
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
@@ -62,6 +63,12 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
             </dependency>
 
             <!--    GRPC dependencies management        -->
