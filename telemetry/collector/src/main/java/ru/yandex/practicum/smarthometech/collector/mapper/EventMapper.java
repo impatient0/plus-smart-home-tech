@@ -15,7 +15,7 @@ import ru.yandex.practicum.smarthometech.collector.mapper.qualifier.Payload;
 @Mapper(componentModel = "spring")
 public interface EventMapper {
 
-    // --- SENSOR EVENT PROTOBUF -> AVRO MAPPERS
+    // --- SENSOR EVENT PROTOBUF -> AVRO MAPPERS ---
 
     default SensorEventAvro toAvro(SensorEventProto proto) {
         if (proto == null) {
