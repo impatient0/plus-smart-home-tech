@@ -39,7 +39,7 @@ public class HubEventKafkaListener {
             case DeviceRemovedEventAvro removed -> {
                 sensorRepository.deleteById(removed.getId());
             }
-            case ScenarioAddedEventAvro added -> {
+            case ScenarioAddedEventAvro ignored -> {
                 scenarioService.saveOrUpdateScenario(event);
             }
             case ScenarioRemovedEventAvro removed -> {
