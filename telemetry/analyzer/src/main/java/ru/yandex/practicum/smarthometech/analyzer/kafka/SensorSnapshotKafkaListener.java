@@ -22,7 +22,7 @@ public class SensorSnapshotKafkaListener {
             "max.poll.records=50"
         })
     public void consumeSnapshot(SensorsSnapshotAvro snapshot) {
-        log.debug("Received snapshot for hubId: {}", snapshot.getHubId());
+        log.info("Received snapshot for hubId: {}", snapshot.getHubId());
 
         evaluationService.evaluate(snapshot);
     }

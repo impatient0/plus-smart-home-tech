@@ -1,6 +1,7 @@
 package ru.yandex.practicum.smarthometech.analyzer.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
@@ -14,6 +15,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ScenarioManagementService {
 
     private final ScenarioRepository scenarioRepository;
@@ -24,6 +26,8 @@ public class ScenarioManagementService {
 
     @Transactional
     public void saveOrUpdateScenario(HubEventAvro hubEvent) {
+        log.info("Saving or updating scenario for hubId: {}", hubEvent.getHubId());
+
         if (!(hubEvent.getPayload() instanceof ScenarioAddedEventAvro event)) {
             return;
         }

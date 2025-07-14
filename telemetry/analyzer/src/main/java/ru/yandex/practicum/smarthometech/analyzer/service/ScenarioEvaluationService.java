@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 import ru.yandex.practicum.smarthometech.analyzer.client.HubRouterClient;
@@ -21,11 +22,13 @@ public class ScenarioEvaluationService {
     private final ConditionEvaluator conditionEvaluator;
     private final HubRouterClient hubRouterClient;
 
+    @Transactional(readOnly = true)
     public void evaluate(SensorsSnapshotAvro snapshot) {
         String hubId = snapshot.getHubId();
-        log.debug("Evaluating snapshot for hubId: {}", hubId);
+        log.info("Evaluating snapshot for hubId: {}", hubId);
 
         List<Scenario> scenarios = scenarioRepository.findByHubId(hubId);
+        log.info("Found {} scenarios for hubId {}", scenarios.size(), hubId);
 
         scenarios.stream()
             .filter(scenario -> allConditionsMet(scenario, snapshot))
