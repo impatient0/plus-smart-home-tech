@@ -30,10 +30,8 @@ public class ScenarioEvaluationService {
         scenarios.stream()
             .filter(scenario -> allConditionsMet(scenario, snapshot))
             .flatMap(scenario -> scenario.getScenarioActions().stream())
-            .forEach(action -> {
-                hubRouterClient.executeAction(hubId, action.getScenario().getName(),
-                    action.getSensor(), action.getAction());
-            });
+            .forEach(action -> hubRouterClient.executeAction(hubId, action.getScenario().getName(),
+                action.getSensor(), action.getAction()));
     }
 
     private boolean allConditionsMet(Scenario scenario, SensorsSnapshotAvro snapshot) {

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.smarthometech.analyzer.client;
 
 import com.google.protobuf.Timestamp;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,13 @@ import java.time.Instant;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class HubRouterClient {
 
     @GrpcClient("hub-router")
     private HubRouterControllerBlockingStub hubRouterStub;
 
     private final EventMapper eventMapper;
-
-    public HubRouterClient(EventMapper eventMapper) {
-        this.eventMapper = eventMapper;
-    }
 
     public void executeAction(String hubId, String scenarioName, Sensor sensor, Action action) {
         try {
