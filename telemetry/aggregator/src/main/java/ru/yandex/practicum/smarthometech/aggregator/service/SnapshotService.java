@@ -13,6 +13,6 @@ public interface SnapshotService {
      * @return An Optional containing the updated snapshot if a change was made,
      *         or an empty Optional otherwise.
      */
-    public Optional<SensorsSnapshotAvro> updateState(SensorEventAvro event);
+    Optional<SensorsSnapshotAvro> updateState(SensorEventAvro event);
 
 }
