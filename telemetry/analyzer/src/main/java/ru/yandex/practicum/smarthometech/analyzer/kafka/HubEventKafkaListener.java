@@ -33,19 +33,13 @@ public class HubEventKafkaListener {
             event.getPayload().getClass().getSimpleName());
 
         switch (event.getPayload()) {
-            case DeviceAddedEventAvro added -> {
+            case DeviceAddedEventAvro added ->
                 sensorRepository.save(eventMapper.toSensorEntity(event.getHubId(), added));
-            }
-            case DeviceRemovedEventAvro removed -> {
-                sensorRepository.deleteById(removed.getId());
-            }
-            case ScenarioAddedEventAvro ignored -> {
-                scenarioService.saveOrUpdateScenario(event);
-            }
-            case ScenarioRemovedEventAvro removed -> {
+            case DeviceRemovedEventAvro removed -> sensorRepository.deleteById(removed.getId());
+            case ScenarioAddedEventAvro ignored -> scenarioService.saveOrUpdateScenario(event);
+            case ScenarioRemovedEventAvro removed ->
                 scenarioRepository.findByHubIdAndName(event.getHubId(), removed.getName())
                     .ifPresent(scenarioRepository::delete);
-            }
             default -> log.warn("Received unhandled hub event payload type: {}",
                 event.getPayload().getClass().getSimpleName());
         }
