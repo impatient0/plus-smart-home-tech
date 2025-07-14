@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.apache.avro.generic.GenericContainer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import ru.yandex.practicum.kafka.telemetry.event.*;
 import ru.yandex.practicum.kafka.telemetry.serializer.BaseAvroSerializer;
 import ru.yandex.practicum.smarthometech.analyzer.client.HubRouterClient;
+import ru.yandex.practicum.smarthometech.analyzer.domain.entity.Sensor;
 
 @SpringBootTest
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9093", "port=9093" },
@@ -58,6 +60,7 @@ class ScenarioEvaluationIntegrationTest {
     }
 
     @Test
+    @DisplayName("Should trigger light scenario when movement is detected")
     void shouldTriggerScenarioAndCallHubRouterWhenConditionsAreMet() {
         // ... ARRANGE ...
         String hubId = "test-hub-1";
@@ -82,6 +85,41 @@ class ScenarioEvaluationIntegrationTest {
         // --- ACT & ASSERT ---
         Mockito.verify(hubRouterClient, Mockito.timeout(5000).times(1))
             .executeAction(eq(hubId), eq(scenarioName), any(), any());
+    }
+
+    @Test
+    @DisplayName("Should trigger temperature scenario when temp is too low")
+    void shouldTriggerTemperatureScenario() {
+        // --- ARRANGE ---
+
+        String hubId = "hub-1";
+        String climateSensorId = "2b0bb4c1-7cf2-475a-a17c-e5cb6239d6e5";
+        String heaterId = "heater-1";
+        String scenarioName = "Регулировка температуры (спальня)";
+
+        var scenarioEvent = createTemperatureScenarioEvent(hubId, climateSensorId, heaterId, scenarioName);
+        byte[] scenarioBytes = avroSerializer.serialize("telemetry.hubs.v1", scenarioEvent);
+        kafkaTemplate.send("telemetry.hubs.v1", hubId, scenarioBytes);
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        var snapshot = createLowTempSnapshot(hubId, climateSensorId);
+        byte[] snapshotBytes = avroSerializer.serialize("telemetry.snapshots.v1", snapshot);
+        kafkaTemplate.send("telemetry.snapshots.v1", hubId, snapshotBytes);
+
+        // --- ACT & ASSERT ---
+
+        Mockito.verify(hubRouterClient, Mockito.timeout(5000).times(1))
+            .executeAction(
+                eq(hubId),
+                eq(scenarioName),
+                any(Sensor.class),
+                Mockito.argThat(action -> action.getType().equals("ACTIVATE"))
+            );
     }
 
     private HubEventAvro createScenarioAddedEvent(String hubId, String sensorId, String scenarioName) {
@@ -126,6 +164,51 @@ class ScenarioEvaluationIntegrationTest {
             .setHubId(hubId)
             .setTimestamp(Instant.now())
             .setSensorsState(Map.of(sensorId, sensorState))
+            .build();
+    }
+
+    private HubEventAvro createTemperatureScenarioEvent(String hubId, String climateSensorId, String heaterId, String scenarioName) {
+        var condition = ScenarioConditionAvro.newBuilder()
+            .setSensorId(climateSensorId)
+            .setType(ConditionTypeAvro.TEMPERATURE)
+            .setOperation(ConditionOperationAvro.LOWER_THAN)
+            .setValue(20)
+            .build();
+
+        var action = DeviceActionAvro.newBuilder()
+            .setSensorId(heaterId)
+            .setType(ActionTypeAvro.ACTIVATE)
+            .build();
+
+        var payload = ScenarioAddedEventAvro.newBuilder()
+            .setName(scenarioName)
+            .setConditions(List.of(condition))
+            .setActions(List.of(action))
+            .build();
+
+        return HubEventAvro.newBuilder()
+            .setHubId(hubId)
+            .setTimestamp(Instant.now())
+            .setPayload(payload)
+            .build();
+    }
+
+    private SensorsSnapshotAvro createLowTempSnapshot(String hubId, String climateSensorId) {
+        var climateSensor = ClimateSensorAvro.newBuilder()
+            .setTemperatureC(15)
+            .setHumidity(45)
+            .setCo2Level(500)
+            .build();
+
+        var sensorState = SensorStateAvro.newBuilder()
+            .setTimestamp(Instant.now())
+            .setData(climateSensor)
+            .build();
+
+        return SensorsSnapshotAvro.newBuilder()
+            .setHubId(hubId)
+            .setTimestamp(Instant.now())
+            .setSensorsState(Map.of(climateSensorId, sensorState))
             .build();
     }
 }
