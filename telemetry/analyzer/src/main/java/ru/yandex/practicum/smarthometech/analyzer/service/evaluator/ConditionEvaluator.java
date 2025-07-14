@@ -11,10 +11,21 @@ import java.util.Optional;
 @Component
 public class ConditionEvaluator {
 
+    private static final ValueExtractor TEMPERATURE_EXTRACTOR = state -> {
+        Object data = state.getData();
+        if (data instanceof TemperatureSensorAvro tempSensor) {
+            return Optional.of(tempSensor.getTemperatureC());
+        }
+        if (data instanceof ClimateSensorAvro climateSensor) {
+            return Optional.of(climateSensor.getTemperatureC());
+        }
+        return Optional.empty();
+    };
+
     private static final Map<String, ValueExtractor> EXTRACTORS = Map.of(
         "MOTION", state -> extract(state, MotionSensorAvro.class, avro -> avro.getMotion() ? 1 : 0),
         "LUMINOSITY", state -> extract(state, LightSensorAvro.class, LightSensorAvro::getLuminosity),
-        "TEMPERATURE", state -> extract(state, TemperatureSensorAvro.class, TemperatureSensorAvro::getTemperatureC),
+        "TEMPERATURE", TEMPERATURE_EXTRACTOR,
         "CO2LEVEL", state -> extract(state, ClimateSensorAvro.class, ClimateSensorAvro::getCo2Level),
         "HUMIDITY", state -> extract(state, ClimateSensorAvro.class, ClimateSensorAvro::getHumidity),
         "SWITCH", state -> extract(state, SwitchSensorAvro.class, avro -> avro.getState() ? 1 : 0)
