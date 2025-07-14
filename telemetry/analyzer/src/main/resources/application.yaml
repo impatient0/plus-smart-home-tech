@@ -1,4 +1,13 @@
 spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: aggregator-group
+      auto-offset-reset: earliest
+      properties:
+        fetch.min.bytes: 1
+        max.poll.records: 10
+        max.poll.interval.ms: 30000
   datasource:
     url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/smart_home_tech}
     username: ${DATASOURCE_USERNAME:postgres}
@@ -7,10 +16,15 @@ spring:
     hibernate:
       ddl-auto: validate
 
-  grpc:
-    client:
-      hub-router:
-        address: 'static://localhost:59090'
-        enableKeepAlive: true
-        keepAliveWithoutCalls: true
-        negotiationType: plaintext
+kafka:
+  topic:
+    hubs: telemetry.hubs.v1
+    snapshots: telemetry.snapshots.v1
+
+grpc:
+  client:
+    hub-router:
+      address: 'static://localhost:59090'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

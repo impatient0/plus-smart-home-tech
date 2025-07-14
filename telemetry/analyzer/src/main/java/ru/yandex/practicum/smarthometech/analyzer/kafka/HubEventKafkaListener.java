@@ -24,7 +24,10 @@ public class HubEventKafkaListener {
     private final ScenarioManagementService scenarioService;
     private final EventMapper eventMapper;
 
-    @KafkaListener(topics = "${kafka.topic.hubs}", groupId = "analyzer-hubs-group")
+    @KafkaListener(id = "hub-events-listener",
+        containerFactory = "hubEventsContainerFactory",
+        topics = "${kafka.topic.hubs}",
+        groupId = "analyzer-hubs-group")
     public void consumeHubEvent(HubEventAvro event) {
         log.info("Received hub event for hubId {}: {}", event.getHubId(),
             event.getPayload().getClass().getSimpleName());

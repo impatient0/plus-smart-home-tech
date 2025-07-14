@@ -14,7 +14,13 @@ public class SensorSnapshotKafkaListener {
 
     private final ScenarioEvaluationService evaluationService;
 
-    @KafkaListener(topics = "${kafka.topic.snapshots}", groupId = "analyzer-snapshots-group")
+    @KafkaListener(id = "snapshots-listener",
+        containerFactory = "snapshotsContainerFactory",
+        topics = "${kafka.topic.snapshots}",
+        groupId = "analyzer-snapshots-group",
+        properties = {
+            "max.poll.records=50"
+        })
     public void consumeSnapshot(SensorsSnapshotAvro snapshot) {
         log.debug("Received snapshot for hubId: {}", snapshot.getHubId());
 
