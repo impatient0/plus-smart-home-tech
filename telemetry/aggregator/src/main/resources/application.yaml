@@ -6,8 +6,12 @@ spring:
       auto-offset-reset: earliest
       value-deserializer: ru.yandex.practicum.kafka.telemetry.deserializer.SensorEventDeserializer
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        fetch.min.bytes: 1
+        max.poll.records: 100
+        max.poll.interval.ms: 30000
     producer:
-      value-serializer: ru.yandex.practicum.kafka.telemetry.serializer.SensorSnapshotAvroSerializer
+      value-serializer: ru.yandex.practicum.kafka.telemetry.serializer.SensorSnapshotSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 kafka:
