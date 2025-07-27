@@ -19,6 +19,7 @@
         <module>telemetry</module>
         <module>infra</module>
         <module>commerce</module>
+        <module>infra/config-server</module>
     </modules>
 
     <properties>
@@ -32,6 +33,7 @@
         <grpc.version>1.63.0</grpc.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <postgresql.version>42.7.7</postgresql.version>
+        <spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version>
 
         <!--       Plugins       -->
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
@@ -69,6 +71,14 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <!--    GRPC dependencies management        -->
