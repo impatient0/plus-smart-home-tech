@@ -10,11 +10,17 @@ COPY infra/config-server/pom.xml ./infra/config-server/
 
 RUN mvn install -N
 RUN mvn install -N -f infra/pom.xml
-RUN mvn install -N -f infra/config-server/pom.xml
+
+# Copy configs
+WORKDIR /app/infra/config-server/src/main/resources/config/telemetry
+COPY telemetry/collector/src/main/resources/application.yaml ./collector/
+COPY telemetry/aggregator/src/main/resources/application.yaml ./aggregator/
+COPY telemetry/analyzer/src/main/resources/application.yaml ./analyzer/
 
 # Build the server config application
+WORKDIR /app
 COPY infra/config-server ./infra/config-server
-RUN mvn -f /app/pom.xml package -DskipTests
+RUN mvn -f infra/config-server/pom.xml package -DskipTests
 
 # Stage 2: Create image
 FROM eclipse-temurin:21-jre-jammy
@@ -23,6 +29,6 @@ WORKDIR /app
 
 EXPOSE 8888
 
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder /app/infra/config-server/target/*.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

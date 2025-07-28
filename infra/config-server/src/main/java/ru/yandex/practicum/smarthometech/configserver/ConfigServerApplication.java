@@ -1,4 +1,4 @@
-package ru.yandex.practicum.smarthometech;
+package ru.yandex.practicum.smarthometech.configserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
