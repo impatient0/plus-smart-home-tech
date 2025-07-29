@@ -1,0 +1,7 @@
+spring:
+  kafka:
+    bootstrap-servers: kafka:29092
+  datasource:
+    url: jdbc:postgresql://postgres:5432/smart_home_tech
+    username: postgres
+    password: postgres

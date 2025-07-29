@@ -7,6 +7,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY telemetry/pom.xml ./telemetry/
 COPY telemetry/serialization/pom.xml ./telemetry/serialization/
+COPY telemetry/telemetry-commons/pom.xml ./telemetry/telemetry-commons/
 
 RUN mvn install -N
 RUN mvn install -N -f telemetry/pom.xml
@@ -15,6 +16,13 @@ RUN mvn install -N -f telemetry/serialization/pom.xml
 # Install serialization dependencies
 COPY telemetry/serialization/avro-schemas ./telemetry/serialization/avro-schemas
 RUN mvn install -f telemetry/serialization/avro-schemas/pom.xml -DskipTests
+
+COPY telemetry/serialization/proto-schemas ./telemetry/serialization/proto-schemas
+RUN mvn install -f telemetry/serialization/proto-schemas/pom.xml -DskipTests
+
+# Install common dependencies
+COPY telemetry/telemetry-commons ./telemetry/telemetry-commons
+RUN mvn install -f telemetry/telemetry-commons/pom.xml -DskipTests
 
 # Build the aggregator application
 COPY telemetry/aggregator ./telemetry/aggregator
