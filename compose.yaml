@@ -1,4 +1,17 @@
 services:
+  discovery-server:
+    build:
+      context: .
+      dockerfile: ./infra/discovery-server/Dockerfile
+    container_name: discovery-server
+    hostname: discovery-server
+    ports:
+      - "8761:8761"
+    environment:
+      EUREKA_HOSTNAME: discovery-server
+
+    restart: unless-stopped
+
   kafka:
     image: confluentinc/confluent-local:7.5.0
     hostname: kafka
@@ -91,6 +104,8 @@ services:
       timeout: 5s
       retries: 10
       start_period: 1s
+    environment:
+      EUREKA_URI: http://discovery-server:8761/eureka/
 
   collector-service:
       build:
@@ -108,6 +123,7 @@ services:
       environment:
         SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
         SPRING_PROFILES_ACTIVE: docker
+        EUREKA_URI: http://discovery-server:8761/eureka/
 
   aggregator-service:
       build:
@@ -125,6 +141,7 @@ services:
       environment:
         SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
         SPRING_PROFILES_ACTIVE: docker
+        EUREKA_URI: http://discovery-server:8761/eureka/
 
   analyzer-service:
       build:
@@ -144,3 +161,4 @@ services:
       environment:
         SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
         SPRING_PROFILES_ACTIVE: docker
+        EUREKA_URI: http://discovery-server:8761/eureka/
