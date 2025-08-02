@@ -9,8 +9,14 @@ services:
       - "8761:8761"
     environment:
       EUREKA_HOSTNAME: discovery-server
-
+      PORT: 8761
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8761/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
   kafka:
     image: confluentinc/confluent-local:7.5.0
@@ -95,17 +101,21 @@ services:
       context: .
       dockerfile: ./infra/config-server/Dockerfile
     container_name: config-server
+    depends_on:
+      discovery-server:
+        condition: service_healthy
     ports:
       - "8888:8888"
     restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:8888/actuator/health || exit 1" ]
-      interval: 10s
+      interval: 5s
       timeout: 5s
-      retries: 10
-      start_period: 1s
+      retries: 5
+      start_period: 5s
     environment:
       EUREKA_URI: http://discovery-server:8761/eureka/
+      PORT: 8888
 
   collector-service:
       build:
@@ -121,7 +131,6 @@ services:
         - "9090:9090"
       restart: unless-stopped
       environment:
-        SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
         SPRING_PROFILES_ACTIVE: docker
         EUREKA_URI: http://discovery-server:8761/eureka/
 
@@ -139,7 +148,6 @@ services:
         - "8080:8080"
       restart: unless-stopped
       environment:
-        SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
         SPRING_PROFILES_ACTIVE: docker
         EUREKA_URI: http://discovery-server:8761/eureka/
 
@@ -159,6 +167,5 @@ services:
         - "8082:8082"
       restart: unless-stopped
       environment:
-        SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
         SPRING_PROFILES_ACTIVE: docker
         EUREKA_URI: http://discovery-server:8761/eureka/
