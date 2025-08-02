@@ -13,6 +13,9 @@ RUN mvn install -N
 RUN mvn install -N -f telemetry/pom.xml
 RUN mvn install -N -f telemetry/serialization/pom.xml
 
+# Download and cache dependencies
+RUN mvn -f infra/discovery-server/pom.xml dependency:go-offline
+
 # Install serialization dependencies
 COPY telemetry/serialization/avro-schemas ./telemetry/serialization/avro-schemas
 RUN mvn install -f telemetry/serialization/avro-schemas/pom.xml -DskipTests
