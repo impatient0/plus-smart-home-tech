@@ -13,9 +13,6 @@ RUN mvn install -N
 RUN mvn install -N -f telemetry/pom.xml
 RUN mvn install -N -f telemetry/serialization/pom.xml
 
-# Download and cache dependencies
-RUN mvn -f infra/discovery-server/pom.xml dependency:go-offline
-
 # Install serialization dependencies
 COPY telemetry/serialization/avro-schemas ./telemetry/serialization/avro-schemas
 RUN mvn install -f telemetry/serialization/avro-schemas/pom.xml -DskipTests
@@ -24,11 +21,13 @@ COPY telemetry/serialization/proto-schemas ./telemetry/serialization/proto-schem
 RUN mvn install -f telemetry/serialization/proto-schemas/pom.xml -DskipTests
 
 # Install common dependencies
-COPY telemetry/telemetry-commons ./telemetry/telemetry-commons
+COPY telemetry/telemetry-commons/pom.xml ./telemetry/telemetry-commons/
 RUN mvn install -f telemetry/telemetry-commons/pom.xml -DskipTests
 
 # Build the aggregator application
-COPY telemetry/aggregator ./telemetry/aggregator
+COPY telemetry/aggregator/pom.xml ./telemetry/aggregator/
+RUN mvn -f telemetry/aggregator/pom.xml dependency:go-offline
+COPY telemetry/aggregator/src ./telemetry/aggregator/src
 RUN mvn package -f telemetry/aggregator/pom.xml -DskipTests
 
 # Stage 2: Create image

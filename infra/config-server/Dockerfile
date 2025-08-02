@@ -12,7 +12,7 @@ RUN mvn install -N
 RUN mvn install -N -f infra/pom.xml
 
 # Download and cache dependencies
-RUN mvn -f infra/discovery-server/pom.xml dependency:go-offline
+RUN mvn -f infra/config-server/pom.xml dependency:go-offline
 
 # Copy configs
 WORKDIR /app/infra/config-server/src/main/resources/config/telemetry
