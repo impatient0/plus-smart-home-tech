@@ -38,5 +38,6 @@ WORKDIR /app
 COPY --from=builder /app/telemetry/collector/target/*.jar app.jar
 
 EXPOSE 9090
+EXPOSE 9091
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

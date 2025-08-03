@@ -18,3 +18,11 @@ kafka:
   topic:
     sensors: telemetry.sensors.v1
     snapshots: telemetry.snapshots.v1
+
+management:
+  server:
+    port: ${HEALTHCHECK_PORT:8080}
+  endpoints:
+    web:
+      exposure:
+        include: health

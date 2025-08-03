@@ -12,4 +12,12 @@ kafka:
 
 grpc:
   server:
-    port: 9090
+    port: ${GRPC_PORT:9090}
+
+management:
+  server:
+    port: ${HEALTHCHECK_PORT:9091}
+  endpoints:
+    web:
+      exposure:
+        include: health
