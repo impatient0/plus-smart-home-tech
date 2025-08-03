@@ -1,4 +1,23 @@
 services:
+  discovery-server:
+    build:
+      context: .
+      dockerfile: ./infra/discovery-server/Dockerfile
+    container_name: discovery-server
+    hostname: discovery-server
+    ports:
+      - "8761:8761"
+    environment:
+      EUREKA_HOSTNAME: discovery-server
+      PORT: 8761
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8761/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
   kafka:
     image: confluentinc/confluent-local:7.5.0
     hostname: kafka
@@ -19,9 +38,9 @@ services:
     healthcheck:
       test: [ "CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list" ]
       interval: 5s
-      timeout: 2s
+      timeout: 3s
       retries: 5
-      start_period: 1s
+      start_period: 3s
 
   kafka-init-topics:
     image: confluentinc/confluent-local:7.5.0
@@ -56,6 +75,12 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_LISTENERS: 'http://0.0.0.0:8081'
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8081/subjects || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 3s
 
   postgres:
     image: postgres:16-alpine
@@ -72,25 +97,31 @@ services:
     restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres -d smart_home_tech" ]
-      interval: 10s
-      timeout: 5s
+      interval: 5s
+      timeout: 3s
       retries: 5
-      start_period: 1s
+      start_period: 2s
 
   config-server:
     build:
       context: .
       dockerfile: ./infra/config-server/Dockerfile
     container_name: config-server
+    depends_on:
+      discovery-server:
+        condition: service_healthy
     ports:
       - "8888:8888"
     restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:8888/actuator/health || exit 1" ]
-      interval: 10s
+      interval: 5s
       timeout: 5s
-      retries: 10
-      start_period: 1s
+      retries: 5
+      start_period: 5s
+    environment:
+      EUREKA_URI: http://discovery-server:8761/eureka/
+      PORT: 8888
 
   collector-service:
       build:
@@ -104,10 +135,19 @@ services:
           condition: service_healthy
       ports:
         - "9090:9090"
+        - "9091:9091"
       restart: unless-stopped
+      healthcheck:
+        test: [ "CMD-SHELL", "curl -f http://localhost:9091/actuator/health || exit 1" ]
+        interval: 5s
+        timeout: 3s
+        retries: 5
+        start_period: 5s
       environment:
-        SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
         SPRING_PROFILES_ACTIVE: docker
+        EUREKA_URI: http://discovery-server:8761/eureka/
+        GRPC_PORT: 9090
+        HEALTHCHECK_PORT: 9091
 
   aggregator-service:
       build:
@@ -122,9 +162,16 @@ services:
       ports:
         - "8080:8080"
       restart: unless-stopped
+      healthcheck:
+        test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
+        interval: 5s
+        timeout: 3s
+        retries: 5
+        start_period: 5s
       environment:
-        SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
         SPRING_PROFILES_ACTIVE: docker
+        EUREKA_URI: http://discovery-server:8761/eureka/
+        HEALTHCHECK_PORT: 8080
 
   analyzer-service:
       build:
@@ -141,6 +188,13 @@ services:
       ports:
         - "8082:8082"
       restart: unless-stopped
+      healthcheck:
+        test: [ "CMD-SHELL", "curl -f http://localhost:8082/actuator/health || exit 1" ]
+        interval: 5s
+        timeout: 3s
+        retries: 5
+        start_period: 5s
       environment:
-        SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
         SPRING_PROFILES_ACTIVE: docker
+        EUREKA_URI: http://discovery-server:8761/eureka/
+        HEALTHCHECK_PORT: 8082

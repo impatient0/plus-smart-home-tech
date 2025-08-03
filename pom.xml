@@ -34,6 +34,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <postgresql.version>42.7.7</postgresql.version>
         <spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version>
+        <eureka.version>4.3.0</eureka.version>
 
         <!--       Plugins       -->
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>

@@ -24,7 +24,15 @@ kafka:
 grpc:
   client:
     hub-router:
-      address: 'static://localhost:59090'
+      address: 'discovery:///hub-router'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
+
+management:
+  server:
+    port: ${HEALTHCHECK_PORT:8082}
+  endpoints:
+    web:
+      exposure:
+        include: health
