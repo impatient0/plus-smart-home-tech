@@ -597,14 +597,7 @@
             "format": "uuid"
           },
           "quantityState": {
-            "type": "string",
-            "description": "Статус, перечисляющий состояние остатка как свойства товара",
-            "enum": [
-              "ENDED",
-              "FEW",
-              "ENOUGH",
-              "MANY"
-            ]
+            "$ref": "#/components/schemas/QuantityState"
           }
         },
         "description": "Запрос на изменение статуса остатка товара"
