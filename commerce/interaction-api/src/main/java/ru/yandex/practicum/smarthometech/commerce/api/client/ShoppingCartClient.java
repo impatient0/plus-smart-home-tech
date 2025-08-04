@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.yandex.practicum.commerce.api.dto.cart.ChangeProductQuantityRequest;
-import ru.yandex.practicum.commerce.api.dto.warehouse.ShoppingCartDto;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.cart.ChangeProductQuantityRequest;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.ShoppingCartDto;
 
 @FeignClient(name = "shopping-cart", path = "/api/v1/shopping-cart")
 public interface ShoppingCartClient {

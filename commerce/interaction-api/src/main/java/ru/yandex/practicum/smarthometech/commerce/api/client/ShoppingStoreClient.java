@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.yandex.practicum.commerce.api.dto.store.ProductDto;
-import ru.yandex.practicum.commerce.api.dto.store.SetProductQuantityStateRequest;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductDto;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.store.SetProductQuantityStateRequest;
 
 @FeignClient(name = "shopping-store", path = "/api/v1/shopping-store")
 public interface ShoppingStoreClient {

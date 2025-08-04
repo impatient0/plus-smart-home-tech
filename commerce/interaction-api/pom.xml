@@ -60,8 +60,8 @@
               <inputSpec>${project.basedir}/src/main/resources/specs/shopping-store.json</inputSpec>
               <generatorName>java</generatorName>
               <library>native</library>
-              <modelPackage>ru.yandex.practicum.commerce.api.dto.store</modelPackage>
-              <apiPackage>ru.yandex.practicum.commerce.api.client.store</apiPackage>
+              <modelPackage>ru.yandex.practicum.smarthometech.commerce.api.dto.store</modelPackage>
+              <apiPackage>ru.yandex.practicum.smarthometech.commerce.api.client.store</apiPackage>
               <generateApis>false</generateApis>
               <generateModels>true</generateModels>
               <generateModelTests>false</generateModelTests>
@@ -87,8 +87,8 @@
               <inputSpec>${project.basedir}/src/main/resources/specs/shopping-cart.json</inputSpec>
               <generatorName>java</generatorName>
               <library>native</library>
-              <modelPackage>ru.yandex.practicum.commerce.api.dto.cart</modelPackage>
-              <apiPackage>ru.yandex.practicum.commerce.api.client.cart</apiPackage>
+              <modelPackage>ru.yandex.practicum.smarthometech.commerce.api.dto.cart</modelPackage>
+              <apiPackage>ru.yandex.practicum.smarthometech.commerce.api.client.cart</apiPackage>
               <generateApis>false</generateApis>
               <generateModels>true</generateModels>
               <generateModelTests>false</generateModelTests>
@@ -114,8 +114,8 @@
               <inputSpec>${project.basedir}/src/main/resources/specs/warehouse.json</inputSpec>
               <generatorName>java</generatorName>
               <library>native</library>
-              <modelPackage>ru.yandex.practicum.commerce.api.dto.warehouse</modelPackage>
-              <apiPackage>ru.yandex.practicum.commerce.api.client.warehouse</apiPackage>
+              <modelPackage>ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse</modelPackage>
+              <apiPackage>ru.yandex.practicum.smarthometech.commerce.api.client.warehouse</apiPackage>
               <generateApis>false</generateApis>
               <generateModels>true</generateModels>
               <generateModelTests>false</generateModelTests>
