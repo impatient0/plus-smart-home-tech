@@ -1,5 +1,6 @@
 package ru.yandex.practicum.smarthometech.commerce.api.client;
 
+import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,12 +26,12 @@ public interface ShoppingStoreClient {
     ProductDto updateProduct(@RequestBody ProductDto product);
 
     @PostMapping("/removeProductFromStore")
-    Boolean removeProduct(@RequestBody String productId);
+    Boolean removeProduct(@RequestBody UUID productId);
 
     @PostMapping("/quantityState")
     Boolean setStatus(@RequestBody SetProductQuantityStateRequest request);
 
     @GetMapping("/{productId}")
-    ProductDto getProduct(@PathVariable String productId);
+    ProductDto getProduct(@PathVariable UUID productId);
 
 }

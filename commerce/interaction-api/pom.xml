@@ -65,6 +65,12 @@
               <generateApis>false</generateApis>
               <generateModels>true</generateModels>
               <generateModelTests>false</generateModelTests>
+              <typeMappings>
+                <typeMapping>UUID=java.util.UUID</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>UUID=java.util.UUID</importMapping>
+              </importMappings>
               <configOptions>
                 <useJakartaEe>true</useJakartaEe>
                 <openApiNullable>false</openApiNullable>
@@ -86,6 +92,12 @@
               <generateApis>false</generateApis>
               <generateModels>true</generateModels>
               <generateModelTests>false</generateModelTests>
+              <typeMappings>
+                <typeMapping>UUID=java.util.UUID</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>UUID=java.util.UUID</importMapping>
+              </importMappings>
               <configOptions>
                 <useJakartaEe>true</useJakartaEe>
                 <openApiNullable>false</openApiNullable>
@@ -107,6 +119,12 @@
               <generateApis>false</generateApis>
               <generateModels>true</generateModels>
               <generateModelTests>false</generateModelTests>
+              <typeMappings>
+                <typeMapping>UUID=java.util.UUID</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>UUID=java.util.UUID</importMapping>
+              </importMappings>
               <configOptions>
                 <useJakartaEe>true</useJakartaEe>
                 <openApiNullable>false</openApiNullable>

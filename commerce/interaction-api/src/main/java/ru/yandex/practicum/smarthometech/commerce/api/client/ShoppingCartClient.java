@@ -2,6 +2,7 @@ package ru.yandex.practicum.smarthometech.commerce.api.client;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +20,13 @@ public interface ShoppingCartClient {
     ShoppingCartDto getCart(@RequestParam String username);
 
     @PutMapping
-    ShoppingCartDto addItem(@RequestParam String username, @RequestBody Map<String, Integer> items);
+    ShoppingCartDto addItem(@RequestParam String username, @RequestBody Map<UUID, Integer> items);
 
     @DeleteMapping
     void deactivateCart(@RequestParam String username);
 
     @PostMapping("/remove")
-    ShoppingCartDto removeItem(@RequestParam String username, @RequestBody List<String> items);
+    ShoppingCartDto removeItem(@RequestParam String username, @RequestBody List<UUID> items);
 
     @PostMapping("/change-quantity")
     ShoppingCartDto changeItemQuantity(@RequestParam String username, @RequestBody
