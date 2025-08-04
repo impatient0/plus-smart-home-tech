@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ru.yandex.practicum</groupId>
+    <artifactId>commerce</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>interaction-api</artifactId>
+  <packaging>jar</packaging>
+
+  <properties>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-openfeign-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-shopping-store-api</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/specs/shopping-store.json</inputSpec>
+              <generatorName>java</generatorName>
+              <library>native</library>
+              <modelPackage>ru.yandex.practicum.commerce.api.dto.store</modelPackage>
+              <apiPackage>ru.yandex.practicum.commerce.api.client.store</apiPackage>
+              <generateApis>false</generateApis>
+              <generateModels>true</generateModels>
+              <generateModelTests>false</generateModelTests>
+              <configOptions>
+                <useJakartaEe>true</useJakartaEe>
+                <openApiNullable>false</openApiNullable>
+                <sourceFolder>src/gen/java/main</sourceFolder>
+              </configOptions>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-shopping-cart-api</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/specs/shopping-cart.json</inputSpec>
+              <generatorName>java</generatorName>
+              <library>native</library>
+              <modelPackage>ru.yandex.practicum.commerce.api.dto.cart</modelPackage>
+              <apiPackage>ru.yandex.practicum.commerce.api.client.cart</apiPackage>
+              <generateApis>false</generateApis>
+              <generateModels>true</generateModels>
+              <generateModelTests>false</generateModelTests>
+              <configOptions>
+                <useJakartaEe>true</useJakartaEe>
+                <openApiNullable>false</openApiNullable>
+                <sourceFolder>src/gen/java/main</sourceFolder>
+              </configOptions>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-warehouse-api</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/specs/warehouse.json</inputSpec>
+              <generatorName>java</generatorName>
+              <library>native</library>
+              <modelPackage>ru.yandex.practicum.commerce.api.dto.warehouse</modelPackage>
+              <apiPackage>ru.yandex.practicum.commerce.api.client.warehouse</apiPackage>
+              <generateApis>false</generateApis>
+              <generateModels>true</generateModels>
+              <generateModelTests>false</generateModelTests>
+              <configOptions>
+                <useJakartaEe>true</useJakartaEe>
+                <openApiNullable>false</openApiNullable>
+                <sourceFolder>src/gen/java/main</sourceFolder>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
