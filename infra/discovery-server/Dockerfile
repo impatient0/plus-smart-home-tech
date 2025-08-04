@@ -8,15 +8,15 @@ COPY pom.xml .
 COPY infra/pom.xml ./infra/
 COPY infra/discovery-server/pom.xml ./infra/discovery-server/
 
-RUN mvn install -N
-RUN mvn install -N -f infra/pom.xml
+RUN --mount=type=cache,target=/root/.m2 mvn install -N
+RUN --mount=type=cache,target=/root/.m2 mvn install -N -f infra/pom.xml
 
 # Download and cache dependencies
-RUN mvn -f infra/discovery-server/pom.xml dependency:go-offline
+RUN --mount=type=cache,target=/root/.m2 mvn -f infra/discovery-server/pom.xml dependency:go-offline
 
 # Build the discovery server application
 COPY infra/discovery-server ./infra/discovery-server
-RUN mvn -f infra/discovery-server/pom.xml package -DskipTests
+RUN --mount=type=cache,target=/root/.m2 mvn -f infra/discovery-server/pom.xml package -DskipTests
 
 # Stage 2: Create image
 FROM eclipse-temurin:21-jre-jammy
