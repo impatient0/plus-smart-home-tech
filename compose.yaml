@@ -198,3 +198,5 @@ services:
         SPRING_PROFILES_ACTIVE: docker
         EUREKA_URI: http://discovery-server:8761/eureka/
         HEALTHCHECK_PORT: 8082
+        DATASOURCE_USERNAME: analyzer_user
+        DATASOURCE_PASSWORD: analyzer_password
