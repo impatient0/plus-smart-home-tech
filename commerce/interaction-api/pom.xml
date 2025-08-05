@@ -132,6 +132,33 @@
               </configOptions>
             </configuration>
           </execution>
+          <execution>
+            <id>generate-common-api</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/specs/common.json</inputSpec>
+              <generatorName>java</generatorName>
+              <library>native</library>
+              <modelPackage>ru.yandex.practicum.smarthometech.commerce.api.dto.common</modelPackage>
+              <apiPackage>ru.yandex.practicum.smarthometech.commerce.api.client.common</apiPackage>
+              <generateApis>false</generateApis>
+              <generateModels>true</generateModels>
+              <generateModelTests>false</generateModelTests>
+              <typeMappings>
+                <typeMapping>UUID=java.util.UUID</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>UUID=java.util.UUID</importMapping>
+              </importMappings>
+              <configOptions>
+                <useJakartaEe>true</useJakartaEe>
+                <openApiNullable>false</openApiNullable>
+                <sourceFolder>src/gen/java/main</sourceFolder>
+              </configOptions>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
     </plugins>

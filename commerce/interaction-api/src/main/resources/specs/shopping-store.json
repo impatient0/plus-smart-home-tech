@@ -44,7 +44,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/Pageable"
+              "$ref": "./common.json#/components/schemas/Pageable"
             }
           }
         ],
@@ -143,7 +143,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductNotFoundException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -186,7 +186,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductNotFoundException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -227,7 +227,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductNotFoundException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -280,7 +280,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductNotFoundException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }

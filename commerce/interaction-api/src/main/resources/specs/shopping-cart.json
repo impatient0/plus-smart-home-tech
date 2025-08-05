@@ -40,7 +40,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotAuthorizedUserException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -104,7 +104,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotAuthorizedUserException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -136,7 +136,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotAuthorizedUserException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -182,7 +182,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ShoppingCartDto"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -192,7 +192,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotAuthorizedUserException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -202,7 +202,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/NoProductsInShoppingCartException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -254,7 +254,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotAuthorizedUserException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -264,7 +264,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/NoProductsInShoppingCartException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }

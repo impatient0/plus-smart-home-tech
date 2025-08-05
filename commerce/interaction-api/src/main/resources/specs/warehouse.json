@@ -44,7 +44,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/SpecifiedProductAlreadyInWarehouseException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -76,7 +76,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductInShoppingCartLowQuantityInWarehouse"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
@@ -118,7 +118,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/NoSpecifiedProductInWarehouseException"
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
