@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductCategory;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.SetProductQuantityStateRequest;
 
@@ -17,19 +18,19 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.store.SetProductQuanti
 public interface ShoppingStoreClient {
 
     @GetMapping
-    Page<ProductDto> getProducts(@RequestParam("category") String category, Pageable pageable);
+    Page<ProductDto> getProducts(@RequestParam("category") ProductCategory category, Pageable pageable);
 
     @PutMapping
-    ProductDto addNewProduct(@RequestBody ProductDto product);
+    ProductDto createNewProduct(@RequestBody ProductDto product);
 
     @PostMapping
     ProductDto updateProduct(@RequestBody ProductDto product);
 
     @PostMapping("/removeProductFromStore")
-    Boolean removeProduct(@RequestBody UUID productId);
+    boolean removeProduct(@RequestBody UUID productId);
 
     @PostMapping("/quantityState")
-    Boolean setStatus(@RequestBody SetProductQuantityStateRequest request);
+    boolean setStatus(@RequestBody SetProductQuantityStateRequest request);
 
     @GetMapping("/{productId}")
     ProductDto getProduct(@PathVariable UUID productId);

@@ -1,22 +1,20 @@
 package ru.yandex.practicum.smarthometech.commerce.store.application.service;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductCategory;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductState;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.SetProductQuantityStateRequest;
-import ru.yandex.practicum.smarthometech.commerce.store.domain.entity.Product;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductCategory;
-import ru.yandex.practicum.smarthometech.commerce.store.domain.repository.ProductRepository;
-import ru.yandex.practicum.smarthometech.commerce.store.application.mapper.ProductMapper;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import ru.yandex.practicum.smarthometech.commerce.store.application.exception.ProductNotFoundException;
+import ru.yandex.practicum.smarthometech.commerce.store.application.mapper.ProductMapper;
+import ru.yandex.practicum.smarthometech.commerce.store.domain.entity.Product;
+import ru.yandex.practicum.smarthometech.commerce.store.domain.repository.ProductRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -27,15 +25,14 @@ public class ShoppingStoreService {
     private final ProductMapper productMapper;
 
     @Transactional(readOnly = true)
-    public List<ProductDto> getProducts(ProductCategory category, Pageable pageable) {
+    public Page<ProductDto> getProducts(ProductCategory category, Pageable pageable) {
         log.debug("Request for products by category: {}, page: {}", category, pageable);
 
-        List<ProductDto> products = productRepository.findByCategoryAndState(category,
-                ProductState.ACTIVE, pageable).stream()
-            .map(productMapper::productToProductDto)
-            .collect(Collectors.toList());
+        Page<Product> productPage = productRepository.findByCategoryAndState(category,
+            ProductState.ACTIVE, pageable);
+        Page<ProductDto> products = productPage.map(productMapper::productToProductDto);
 
-        log.debug("Found {} products", products.size());
+        log.debug("Found {} products on page {}", products.getTotalElements(), products.getNumber());
         return products;
     }
 
