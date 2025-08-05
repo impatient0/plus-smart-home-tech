@@ -1,4 +1,4 @@
-package ru.yandex.practicum.smarthometech.commerce.store.domain.mapper;
+package ru.yandex.practicum.smarthometech.commerce.store.application.mapper;
 
 import org.mapstruct.Mapper;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductDto;

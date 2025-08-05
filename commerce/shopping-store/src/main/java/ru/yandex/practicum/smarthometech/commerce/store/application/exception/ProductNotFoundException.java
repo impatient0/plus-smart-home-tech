@@ -1,4 +1,4 @@
-package ru.yandex.practicum.smarthometech.commerce.store.exception;
+package ru.yandex.practicum.smarthometech.commerce.store.application.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

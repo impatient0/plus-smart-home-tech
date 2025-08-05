@@ -1,4 +1,4 @@
-package ru.yandex.practicum.smarthometech.commerce.store.domain.service;
+package ru.yandex.practicum.smarthometech.commerce.store.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +11,12 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.store.SetProductQuanti
 import ru.yandex.practicum.smarthometech.commerce.store.domain.entity.Product;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductCategory;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.repository.ProductRepository;
-import ru.yandex.practicum.smarthometech.commerce.store.domain.mapper.ProductMapper;
+import ru.yandex.practicum.smarthometech.commerce.store.application.mapper.ProductMapper;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import ru.yandex.practicum.smarthometech.commerce.store.exception.ProductNotFoundException;
+import ru.yandex.practicum.smarthometech.commerce.store.application.exception.ProductNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class ShoppingStoreService {
     public List<ProductDto> getProducts(ProductCategory category, Pageable pageable) {
         log.debug("Request for products by category: {}, page: {}", category, pageable);
 
-        List<ProductDto> products = productRepository.findByProductCategoryAndProductState(category,
+        List<ProductDto> products = productRepository.findByCategoryAndState(category,
                 ProductState.ACTIVE, pageable).stream()
             .map(productMapper::productToProductDto)
             .collect(Collectors.toList());
