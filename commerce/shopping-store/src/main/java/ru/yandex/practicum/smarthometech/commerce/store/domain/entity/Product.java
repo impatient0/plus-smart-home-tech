@@ -38,7 +38,7 @@ public class Product {
     @Column(name = "description", columnDefinition = "TEXT")
     String description;
 
-    @Column(name = "image_src", nullable = false)
+    @Column(name = "image_src")
     String imageSrc;
 
     @Enumerated(EnumType.STRING)
