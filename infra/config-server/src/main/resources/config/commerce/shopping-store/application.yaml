@@ -1,0 +1,26 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/smart_home_tech}
+    username: ${DATASOURCE_USERNAME:store_user}
+    password: ${DATASOURCE_PASSWORD:store_password}
+  jpa:
+    properties:
+      hibernate:
+        default_schema: shopping_store
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    ru.yandex.practicum: DEBUG
+
+management:
+  server:
+    port: 8084
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
