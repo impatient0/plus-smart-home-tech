@@ -27,6 +27,8 @@ ALTER DEFAULT PRIVILEGES FOR ROLE analyzer_user IN SCHEMA analyzer
    GRANT USAGE, SELECT ON SEQUENCES TO analyzer_user;
 
 
+SET ROLE analyzer_user;
+
 CREATE TABLE IF NOT EXISTS analyzer.scenarios (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     hub_id VARCHAR,
@@ -88,6 +90,8 @@ BEFORE INSERT ON analyzer.scenario_actions
 FOR EACH ROW
 EXECUTE FUNCTION analyzer.check_hub_id();
 
+RESET ROLE;
+
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA analyzer TO analyzer_user;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA analyzer TO analyzer_user;
@@ -103,7 +107,11 @@ ALTER DEFAULT PRIVILEGES FOR ROLE cart_user IN SCHEMA shopping_cart
 ALTER DEFAULT PRIVILEGES FOR ROLE cart_user IN SCHEMA shopping_cart
    GRANT USAGE, SELECT ON SEQUENCES TO cart_user;
 
+SET ROLE cart_user;
+
 -- ... Tables for shopping_cart schema will go here ...
+
+RESET ROLE;
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA shopping_cart TO cart_user;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA shopping_cart TO cart_user;
@@ -119,7 +127,28 @@ ALTER DEFAULT PRIVILEGES FOR ROLE store_user IN SCHEMA shopping_store
 ALTER DEFAULT PRIVILEGES FOR ROLE store_user IN SCHEMA shopping_store
    GRANT USAGE, SELECT ON SEQUENCES TO store_user;
 
--- ... Tables for shopping_store schema will go here ...
+SET ROLE store_user;
+
+CREATE TYPE shopping_store.product_category AS ENUM ('LIGHTING', 'CONTROL', 'SENSORS');
+CREATE TYPE shopping_store.product_state AS ENUM ('ACTIVE', 'DEACTIVATE');
+CREATE TYPE shopping_store.quantity_state AS ENUM ('ENDED', 'FEW', 'ENOUGH', 'MANY');
+
+CREATE TABLE IF NOT EXISTS shopping_store.products
+(
+    product_id       UUID PRIMARY KEY,
+
+    name             VARCHAR(255) NOT NULL UNIQUE,
+    description      TEXT,
+    image_src        VARCHAR(255),
+
+    category         shopping_store.product_category NOT NULL,
+    product_state    shopping_store.product_state    NOT NULL,
+    quantity_state   shopping_store.quantity_state   NOT NULL,
+
+    price            NUMERIC(38,2) NOT NULL CHECK (price > 0)
+);
+
+RESET ROLE;
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA shopping_store TO store_user;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA shopping_store TO store_user;
@@ -135,7 +164,11 @@ ALTER DEFAULT PRIVILEGES FOR ROLE warehouse_user IN SCHEMA warehouse
 ALTER DEFAULT PRIVILEGES FOR ROLE warehouse_user IN SCHEMA warehouse
    GRANT USAGE, SELECT ON SEQUENCES TO warehouse_user;
 
+SET ROLE warehouse_user;
+
 -- ... Tables for warehouse schema will go here ...
+
+RESET ROLE;
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA warehouse TO warehouse_user;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA warehouse TO warehouse_user;
