@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDtoCause;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDtoCauseStackTraceInner;
@@ -41,6 +40,5 @@ public interface ErrorMapper {
 
     List<ApiErrorDtoCause> toSuppressedDto(Throwable[] suppressed);
 
-    @Mapping(target = "nativeMethod", source = "native")
     ApiErrorDtoCauseStackTraceInner toStackTraceInnerDto(StackTraceElement element);
 }
