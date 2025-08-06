@@ -21,7 +21,7 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductState;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.QuantityState;
 
 @Entity
-@Table(name = "products")
+@Table(name = "products", schema = "shopping_store")
 @Getter
 @Setter
 @ToString
@@ -35,7 +35,7 @@ public class Product {
     @Column(name = "name", nullable = false)
     String name;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     String description;
 
     @Column(name = "image_src", nullable = false)
@@ -43,17 +43,17 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
-    @Column(name = "quantity_state", nullable = false, columnDefinition = "quantity_state")
+    @Column(name = "quantity_state", nullable = false, columnDefinition = "shopping_store.quantity_state")
     private QuantityState quantityState;
 
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
-    @Column(name = "product_state", nullable = false, columnDefinition = "product_state")
+    @Column(name = "product_state", nullable = false, columnDefinition = "shopping_store.product_state")
     private ProductState productState;
 
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
-    @Column(name = "category", nullable = false, columnDefinition = "product_category")
+    @Column(name = "category", nullable = false, columnDefinition = "shopping_store.product_category")
     private ProductCategory productCategory;
 
     @Column(name = "price", nullable = false)
