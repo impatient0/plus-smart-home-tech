@@ -166,7 +166,18 @@ ALTER DEFAULT PRIVILEGES FOR ROLE warehouse_user IN SCHEMA warehouse
 
 SET ROLE warehouse_user;
 
--- ... Tables for warehouse schema will go here ...
+CREATE TABLE IF NOT EXISTS warehouse.warehouse_items
+(
+    product_id  UUID PRIMARY KEY,
+
+    quantity    INTEGER NOT NULL DEFAULT 0 CHECK (quantity >= 0),
+
+    weight_kg   NUMERIC(10, 3) NOT NULL CHECK (weight_kg > 0),
+    width_m     NUMERIC(10, 3) NOT NULL CHECK (width_m > 0),
+    height_m    NUMERIC(10, 3) NOT NULL CHECK (height_m > 0),
+    depth_m     NUMERIC(10, 3) NOT NULL CHECK (depth_m > 0),
+    is_fragile  BOOLEAN NOT NULL DEFAULT FALSE
+);
 
 RESET ROLE;
 

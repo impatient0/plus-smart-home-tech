@@ -1,0 +1,26 @@
+server:
+  port: 8085
+
+spring:
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/smart_home_tech}
+    username: ${DATASOURCE_USERNAME:warehouse_user}
+    password: ${DATASOURCE_PASSWORD:warehouse_password}
+  jpa:
+    properties:
+      hibernate:
+        default_schema: warehouse
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    ru.yandex.practicum: DEBUG
+
+management:
+  server:
+    port: 8086
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"

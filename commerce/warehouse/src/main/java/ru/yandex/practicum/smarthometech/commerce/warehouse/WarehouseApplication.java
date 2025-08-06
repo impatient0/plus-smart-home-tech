@@ -1,4 +1,4 @@
-package ru.yandex.practicum.smarthometech.warehouse;
+package ru.yandex.practicum.smarthometech.commerce.warehouse;
 
 public class WarehouseApplication {
 
