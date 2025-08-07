@@ -10,7 +10,7 @@ import ru.yandex.practicum.smarthometech.commerce.warehouse.domain.entity.Wareho
 public interface WarehouseMapper {
 
     @Mapping(target = "productId", source = "productId")
-    @Mapping(target = "quantity", constant = "0")
+    @Mapping(target = "quantity", constant = "0L")
     @Mapping(target = "weightKg", source = "weight")
     @Mapping(target = "isFragile", source = "fragile")
     @Mapping(target = "widthM", source = "dimension.width")
