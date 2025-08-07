@@ -28,7 +28,7 @@ public class CartItem {
 
     @NotNull
     @Column(name = "quantity", nullable = false)
-    private Integer quantity;
+    private Long quantity;
 
     // A robust equals/hashCode is crucial for managing items in a Set
     @Override
