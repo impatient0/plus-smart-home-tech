@@ -16,9 +16,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductCategory;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductState;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.QuantityState;
+import ru.yandex.practicum.smarthometech.commerce.store.domain.enums.ProductCategory;
+import ru.yandex.practicum.smarthometech.commerce.store.domain.enums.ProductState;
+import ru.yandex.practicum.smarthometech.commerce.store.domain.enums.QuantityState;
 
 @Entity
 @Table(name = "products", schema = "shopping_store")

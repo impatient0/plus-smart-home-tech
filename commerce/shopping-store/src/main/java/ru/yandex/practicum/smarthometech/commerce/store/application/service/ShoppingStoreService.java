@@ -7,13 +7,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductCategory;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductDto;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductState;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.SetProductQuantityStateRequest;
 import ru.yandex.practicum.smarthometech.commerce.store.application.exception.ProductNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.store.application.mapper.ProductMapper;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.entity.Product;
+import ru.yandex.practicum.smarthometech.commerce.store.domain.enums.ProductState;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.repository.ProductRepository;
 
 @Service
@@ -25,10 +24,14 @@ public class ShoppingStoreService {
     private final ProductMapper productMapper;
 
     @Transactional(readOnly = true)
-    public Page<ProductDto> getProducts(ProductCategory category, Pageable pageable) {
-        log.debug("Request for products by category: {}, page: {}", category, pageable);
+    public Page<ProductDto> getProducts(
+        ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductCategory apiProductCategory, Pageable pageable) {
+        ru.yandex.practicum.smarthometech.commerce.store.domain.enums.ProductCategory domainCategory =
+            productMapper.toDomain(apiProductCategory);
 
-        Page<Product> productPage = productRepository.findByCategoryAndState(category,
+        log.debug("Request for products by category: {}, page: {}", domainCategory, pageable);
+
+        Page<Product> productPage = productRepository.findByCategoryAndState(domainCategory,
             ProductState.ACTIVE, pageable);
         Page<ProductDto> products = productPage.map(productMapper::productToProductDto);
 
@@ -86,7 +89,8 @@ public class ShoppingStoreService {
         Product product = productRepository.findById(request.getProductId())
             .orElseThrow(() -> new ProductNotFoundException(request.getProductId()));
 
-        product.setQuantityState(request.getQuantityState());
+        ru.yandex.practicum.smarthometech.commerce.store.domain.enums.QuantityState domainQuantityState = productMapper.toDomain(request.getQuantityState());
+        product.setQuantityState(domainQuantityState);
         productRepository.save(product);
 
         log.info("Quantity state for product id: {} updated to {}", request.getProductId(), request.getQuantityState());

@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductCategory;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductState;
+import ru.yandex.practicum.smarthometech.commerce.store.domain.enums.ProductCategory;
+import ru.yandex.practicum.smarthometech.commerce.store.domain.enums.ProductState;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.entity.Product;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.repository.ProductRepository;
 
