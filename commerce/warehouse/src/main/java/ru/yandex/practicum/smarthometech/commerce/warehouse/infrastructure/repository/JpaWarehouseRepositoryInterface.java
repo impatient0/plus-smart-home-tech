@@ -1,8 +1,0 @@
-package ru.yandex.practicum.smarthometech.commerce.warehouse.infrastructure.repository;
-
-import java.util.UUID;
-import org.springframework.data.jpa.repository.JpaRepository;
-import ru.yandex.practicum.smarthometech.commerce.warehouse.domain.entity.WarehouseItem;
-
-public interface JpaWarehouseRepositoryInterface extends JpaRepository<WarehouseItem, UUID> {
-}
