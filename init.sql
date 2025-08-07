@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS warehouse.warehouse_items
 (
     product_id  UUID PRIMARY KEY,
 
-    quantity    INTEGER NOT NULL DEFAULT 0 CHECK (quantity >= 0),
+    quantity    BIGINT NOT NULL DEFAULT 0 CHECK (quantity >= 0),
 
     weight_kg   NUMERIC(10, 3) NOT NULL CHECK (weight_kg > 0),
     width_m     NUMERIC(10, 3) NOT NULL CHECK (width_m > 0),

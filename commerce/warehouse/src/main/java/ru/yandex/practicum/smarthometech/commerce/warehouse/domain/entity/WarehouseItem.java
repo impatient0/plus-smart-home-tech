@@ -23,7 +23,7 @@ public class WarehouseItem {
 
     @NotNull
     @Column(name = "quantity", nullable = false)
-    private Integer quantity = 0;
+    private Long quantity = 0L;
 
     @NotNull
     @Column(name = "weight_kg", nullable = false)
