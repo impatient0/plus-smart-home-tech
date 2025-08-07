@@ -109,7 +109,24 @@ ALTER DEFAULT PRIVILEGES FOR ROLE cart_user IN SCHEMA shopping_cart
 
 SET ROLE cart_user;
 
--- ... Tables for shopping_cart schema will go here ...
+CREATE TYPE shopping_cart.cart_status AS ENUM ('ACTIVE', 'DEACTIVATED');
+
+CREATE TABLE IF NOT EXISTS shopping_cart.shopping_carts
+(
+    shopping_cart_id UUID PRIMARY KEY,
+    username         VARCHAR(255) NOT NULL UNIQUE,
+    status           shopping_cart.cart_status NOT NULL DEFAULT 'ACTIVE'
+);
+
+CREATE TABLE IF NOT EXISTS shopping_cart.cart_items
+(
+    id                 BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    shopping_cart_id   UUID NOT NULL REFERENCES shopping_cart.shopping_carts(shopping_cart_id) ON DELETE CASCADE,
+    product_id         UUID NOT NULL,
+    quantity           INTEGER NOT NULL CHECK (quantity > 0),
+
+    UNIQUE (shopping_cart_id, product_id)
+);
 
 RESET ROLE;
 
