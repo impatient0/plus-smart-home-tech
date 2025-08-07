@@ -26,6 +26,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiErrorDto> handleIllegalArgumentException(IllegalArgumentException ex) {
+        ApiErrorDto errorDto = errorMapper.toErrorDto(ex);
+
+        errorDto.setUserMessage(ex.getMessage());
+        errorDto.setHttpStatus(ApiErrorDto.HttpStatusEnum._400_BAD_REQUEST);
+
+        return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorDto> handleGenericException(Exception ex) {
 
