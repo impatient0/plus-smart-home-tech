@@ -21,7 +21,7 @@ public interface WarehouseClient {
     void increaseProductQuantity(@RequestBody AddProductToWarehouseRequest product);
 
     @GetMapping("/address")
-    AddressDto getAddress();
+    AddressDto getWarehouseAddress();
 
     @PutMapping
     void addNewProduct(@RequestBody NewProductInWarehouseRequest product);
