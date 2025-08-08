@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductDto;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.SetProductQuantityStateRequest;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.Product;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.ProductCategory;
@@ -84,17 +83,18 @@ public class ShoppingStoreService {
     }
 
     @Transactional
-    public boolean setProductQuantityState(SetProductQuantityStateRequest request) {
-        log.debug("Setting quantity state for product id: {}, state: {}", request.getProductId(), request.getQuantityState());
+    public boolean setProductQuantityState(UUID productId,
+        ru.yandex.practicum.smarthometech.commerce.api.dto.store.QuantityState apiQuantityState) {
+        log.debug("Setting quantity state for product id: {}, state: {}", productId, apiQuantityState);
 
-        Product product = productRepository.findById(request.getProductId())
-            .orElseThrow(() -> new ProductNotFoundException(request.getProductId()));
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new ProductNotFoundException(productId));
 
-        QuantityState domainQuantityState = productMapper.toDomain(request.getQuantityState());
+        QuantityState domainQuantityState = productMapper.toDomain(apiQuantityState);
         product.setQuantityState(domainQuantityState);
         productRepository.save(product);
 
-        log.info("Quantity state for product id: {} updated to {}", request.getProductId(), request.getQuantityState());
+        log.info("Quantity state for product id: {} updated to {}", productId, apiQuantityState);
         return true;
     }
 

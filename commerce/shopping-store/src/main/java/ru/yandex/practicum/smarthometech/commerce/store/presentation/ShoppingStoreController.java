@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.smarthometech.commerce.api.client.ShoppingStoreClient;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductCategory;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductDto;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.SetProductQuantityStateRequest;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.store.QuantityState;
 import ru.yandex.practicum.smarthometech.commerce.store.application.ShoppingStoreService;
 
 @RestController
@@ -51,8 +51,9 @@ public class ShoppingStoreController implements ShoppingStoreClient {
 
     @Override
     @PostMapping("/quantityState")
-    public boolean setStatus(@RequestBody SetProductQuantityStateRequest request) {
-        return shoppingStoreService.setProductQuantityState(request);
+    public boolean setStatus(@RequestParam("productId") UUID productId,
+        @RequestParam("quantityState") QuantityState quantityState) {
+        return shoppingStoreService.setProductQuantityState(productId, quantityState);
     }
 
     @Override

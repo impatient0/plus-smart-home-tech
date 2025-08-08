@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductCategory;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductDto;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.store.SetProductQuantityStateRequest;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.store.QuantityState;
 
 @FeignClient(name = "shopping-store", path = "/api/v1/shopping-store")
 public interface ShoppingStoreClient {
@@ -30,7 +30,8 @@ public interface ShoppingStoreClient {
     boolean removeProduct(@RequestBody UUID productId);
 
     @PostMapping("/quantityState")
-    boolean setStatus(@RequestBody SetProductQuantityStateRequest request);
+    boolean setStatus(@RequestParam("productId") UUID productId,
+        @RequestParam("quantityState") QuantityState quantityState);
 
     @GetMapping("/{productId}")
     ProductDto getProduct(@PathVariable UUID productId);
