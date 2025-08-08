@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDto;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.InsufficientQuantityException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
-import ru.yandex.practicum.smarthometech.commerce.api.exception.WarehouseInteractionException;
+import ru.yandex.practicum.smarthometech.commerce.api.exception.WarehouseClientException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,11 +41,11 @@ public class WarehouseErrorDecoder implements ErrorDecoder {
                     Long available = extractLong(errorDto, "availableQuantity").orElse(0L);
                     yield new InsufficientQuantityException(productId, requested, available);
                 }
-                yield new WarehouseInteractionException("Bad request to warehouse service: " + userMessage);
+                yield new WarehouseClientException("Bad request to warehouse service: " + userMessage);
             }
             default -> {
                 log.error("Warehouse service returned an unexpected error. Status: {}. Method: {}.", status, methodKey);
-                yield new WarehouseInteractionException("Generic error communicating with Warehouse service. Status: " + status);
+                yield new WarehouseClientException("Generic error communicating with Warehouse service. Status: " + status);
             }
         };
     }
