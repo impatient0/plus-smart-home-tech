@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDto;
+import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.api.mapper.ErrorMapper;
-import ru.yandex.practicum.smarthometech.commerce.warehouse.application.InsufficientQuantityException;
-import ru.yandex.practicum.smarthometech.commerce.warehouse.application.ProductAlreadyExistsException;
-import ru.yandex.practicum.smarthometech.commerce.warehouse.application.ProductNotFoundException;
+import ru.yandex.practicum.smarthometech.commerce.api.exception.InsufficientQuantityException;
+import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductAlreadyExistsException;
 
 @RestControllerAdvice
 @RequiredArgsConstructor

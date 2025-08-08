@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDto;
 import ru.yandex.practicum.smarthometech.commerce.api.mapper.ErrorMapper;
-import ru.yandex.practicum.smarthometech.commerce.store.application.ProductNotFoundException;
+import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
 
 @RestControllerAdvice
 @RequiredArgsConstructor

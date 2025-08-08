@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.SetProductQuantityStateRequest;
+import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.Product;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.ProductCategory;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.ProductState;

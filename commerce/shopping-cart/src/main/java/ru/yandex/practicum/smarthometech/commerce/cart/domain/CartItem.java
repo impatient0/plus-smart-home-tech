@@ -17,7 +17,6 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // The link back to the parent ShoppingCart
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shopping_cart_id", nullable = false)
     private ShoppingCart shoppingCart;
@@ -30,13 +29,11 @@ public class CartItem {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
-    // A robust equals/hashCode is crucial for managing items in a Set
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CartItem cartItem = (CartItem) o;
-        // Two items are the same if they are for the same product in the same cart
         return Objects.equals(shoppingCart, cartItem.shoppingCart) &&
             Objects.equals(productId, cartItem.productId);
     }
