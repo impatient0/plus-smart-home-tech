@@ -216,6 +216,11 @@
           },
           "localizedMessage": {
             "type": "string"
+          },
+          "details": {
+            "type": "object",
+            "description": "A map for structured, context-specific error details.",
+            "additionalProperties": true
           }
         }
       },

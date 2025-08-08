@@ -1,5 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.warehouse.presentation;
 
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ public class GlobalExceptionHandler {
         ApiErrorDto errorDto = errorMapper.toErrorDto(ex);
         errorDto.setUserMessage(String.format("Product with ID '%s' is not registered in the warehouse.", ex.getProductId()));
         errorDto.setHttpStatus(ApiErrorDto.HttpStatusEnum._404_NOT_FOUND);
+        errorDto.setDetails(Map.of("productId", ex.getProductId().toString()));
 
         return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
@@ -37,6 +40,7 @@ public class GlobalExceptionHandler {
         ApiErrorDto errorDto = errorMapper.toErrorDto(ex);
         errorDto.setUserMessage(String.format("Product with ID '%s' is already registered in the warehouse.", ex.getProductId()));
         errorDto.setHttpStatus(ApiErrorDto.HttpStatusEnum._400_BAD_REQUEST);
+        errorDto.setDetails(Map.of("productId", ex.getProductId().toString()));
 
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
@@ -51,6 +55,11 @@ public class GlobalExceptionHandler {
             ex.getProductId(), ex.getRequestedQuantity(), ex.getAvailableQuantity()
         ));
         errorDto.setHttpStatus(ApiErrorDto.HttpStatusEnum._400_BAD_REQUEST);
+        Map<String, Object> detailsMap = new HashMap<>();
+        detailsMap.put("productId", ex.getProductId().toString());
+        detailsMap.put("requestedQuantity", ex.getRequestedQuantity());
+        detailsMap.put("availableQuantity", ex.getAvailableQuantity());
+        errorDto.setDetails(detailsMap);
 
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }

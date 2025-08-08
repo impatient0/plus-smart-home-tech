@@ -1,5 +1,6 @@
 package ru.yandex.practicum.smarthometech.commerce.store.presentation;
 
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class GlobalExceptionHandler {
 
         errorDto.setUserMessage(String.format("The product with ID '%s' could not be found.", ex.getProductId()));
         errorDto.setHttpStatus(ApiErrorDto.HttpStatusEnum._404_NOT_FOUND);
+        errorDto.setDetails(Map.of("productId", ex.getProductId().toString()));
 
         return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
