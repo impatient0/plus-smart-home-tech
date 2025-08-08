@@ -23,7 +23,7 @@ public class WarehouseErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
         ApiErrorDto errorDto = parseErrorDto(response).orElse(null);
-        String userMessage = (errorDto != null && errorDto.getUserMessage() != null) ? errorDto.getUserMessage() : "No details provided";
+        String userMessage = errorDto != null  ? errorDto.getMessage() : "No details provided";
 
         HttpStatus status = HttpStatus.valueOf(response.status());
 

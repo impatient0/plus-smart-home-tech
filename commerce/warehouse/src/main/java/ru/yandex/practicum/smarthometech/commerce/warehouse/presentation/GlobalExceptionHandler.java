@@ -1,6 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.warehouse.presentation;
 
-import java.util.HashMap;
+import jakarta.servlet.http.HttpServletRequest;
+import java.time.OffsetDateTime;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDto;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
-import ru.yandex.practicum.smarthometech.commerce.api.mapper.ErrorMapper;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.InsufficientQuantityException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductAlreadyExistsException;
 
@@ -19,58 +19,64 @@ import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductAlreadyEx
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private final ErrorMapper errorMapper;
-
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ApiErrorDto> handleProductNotFoundException(ProductNotFoundException ex) {
-        log.warn("Handling ProductNotFoundException: {}", ex.getMessage());
+    public ResponseEntity<ApiErrorDto> handleProductNotFoundException(ProductNotFoundException ex, HttpServletRequest request) {
 
-        ApiErrorDto errorDto = errorMapper.toErrorDto(ex);
-        errorDto.setUserMessage(String.format("Product with ID '%s' is not registered in the warehouse.", ex.getProductId()));
-        errorDto.setHttpStatus(ApiErrorDto.HttpStatusEnum._404_NOT_FOUND);
-        errorDto.setDetails(Map.of("productId", ex.getProductId().toString()));
+        ApiErrorDto errorDto = new ApiErrorDto()
+            .timestamp(OffsetDateTime.now())
+            .status(HttpStatus.NOT_FOUND.value())
+            .errorCode("PRODUCT_NOT_FOUND_IN_WAREHOUSE")
+            .message(String.format("Product with ID '%s' is not registered in the warehouse.", ex.getProductId()))
+            .path(request.getRequestURI())
+            .details(Map.of("productId", ex.getProductId().toString()));
 
         return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ProductAlreadyExistsException.class)
-    public ResponseEntity<ApiErrorDto> handleProductAlreadyExistsException(ProductAlreadyExistsException ex) {
-        log.warn("Handling ProductAlreadyExistsException: {}", ex.getMessage());
+    public ResponseEntity<ApiErrorDto> handleProductAlreadyExistsException(ProductAlreadyExistsException ex, HttpServletRequest request) {
 
-        ApiErrorDto errorDto = errorMapper.toErrorDto(ex);
-        errorDto.setUserMessage(String.format("Product with ID '%s' is already registered in the warehouse.", ex.getProductId()));
-        errorDto.setHttpStatus(ApiErrorDto.HttpStatusEnum._400_BAD_REQUEST);
-        errorDto.setDetails(Map.of("productId", ex.getProductId().toString()));
+        ApiErrorDto errorDto = new ApiErrorDto()
+            .timestamp(OffsetDateTime.now())
+            .status(HttpStatus.BAD_REQUEST.value())
+            .errorCode("PRODUCT_ALREADY_EXISTS_IN_WAREHOUSE")
+            .message(String.format("Product with ID '%s' is already registered in the warehouse.", ex.getProductId()))
+            .path(request.getRequestURI())
+            .details(Map.of("productId", ex.getProductId().toString()));
 
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InsufficientQuantityException.class)
-    public ResponseEntity<ApiErrorDto> handleInsufficientQuantityException(InsufficientQuantityException ex) {
-        log.warn("Handling InsufficientQuantityException: {}", ex.getMessage());
+    public ResponseEntity<ApiErrorDto> handleInsufficientQuantityException(InsufficientQuantityException ex, HttpServletRequest request) {
 
-        ApiErrorDto errorDto = errorMapper.toErrorDto(ex);
-        errorDto.setUserMessage(String.format(
-            "Insufficient stock for product ID '%s'. Requested: %d, Available: %d.",
-            ex.getProductId(), ex.getRequestedQuantity(), ex.getAvailableQuantity()
-        ));
-        errorDto.setHttpStatus(ApiErrorDto.HttpStatusEnum._400_BAD_REQUEST);
-        Map<String, Object> detailsMap = new HashMap<>();
-        detailsMap.put("productId", ex.getProductId().toString());
-        detailsMap.put("requestedQuantity", ex.getRequestedQuantity());
-        detailsMap.put("availableQuantity", ex.getAvailableQuantity());
-        errorDto.setDetails(detailsMap);
+        ApiErrorDto errorDto = new ApiErrorDto()
+            .timestamp(OffsetDateTime.now())
+            .status(HttpStatus.BAD_REQUEST.value())
+            .errorCode("INSUFFICIENT_QUANTITY_IN_WAREHOUSE")
+            .message(String.format(
+                "Insufficient stock for product ID '%s'. Requested: %d, Available: %d.",
+                ex.getProductId(), ex.getRequestedQuantity(), ex.getAvailableQuantity()))
+            .path(request.getRequestURI())
+            .details(Map.of(
+                "productId", ex.getProductId().toString(),
+                "requestedQuantity", ex.getRequestedQuantity(),
+                "availableQuantity", ex.getAvailableQuantity()
+            ));
 
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorDto> handleGenericException(Exception ex) {
-        log.error("Handling unexpected exception", ex);
+    public ResponseEntity<ApiErrorDto> handleGenericException(Exception ex, HttpServletRequest request) {
 
-        ApiErrorDto errorDto = errorMapper.toErrorDto(ex);
-        errorDto.setUserMessage("An unexpected internal server error occurred.");
-        errorDto.setHttpStatus(ApiErrorDto.HttpStatusEnum._500_INTERNAL_SERVER_ERROR);
+        log.error("An unexpected error occurred: {}", ex.getMessage(), ex);
+        ApiErrorDto errorDto = new ApiErrorDto()
+            .timestamp(OffsetDateTime.now())
+            .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .errorCode("INTERNAL_SERVER_ERROR")
+            .message("An unexpected error occurred.")
+            .path(request.getRequestURI());
 
         return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
