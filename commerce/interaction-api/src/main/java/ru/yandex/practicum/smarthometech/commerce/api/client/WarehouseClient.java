@@ -9,7 +9,7 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.AddProductTo
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.AddressDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.BookedProductsDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.NewProductInWarehouseRequest;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.ShoppingCartDto;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.cart.ShoppingCartDto;
 
 @FeignClient(name = "warehouse", path = "/api/v1/warehouse")
 public interface WarehouseClient {

@@ -14,7 +14,7 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.AddProductTo
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.AddressDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.BookedProductsDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.NewProductInWarehouseRequest;
-import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.ShoppingCartDto;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.cart.ShoppingCartDto;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.InsufficientQuantityException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductAlreadyExistsException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.smarthometech.commerce.api.client.WarehouseClient;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.*;
+import ru.yandex.practicum.smarthometech.commerce.api.dto.cart.ShoppingCartDto;
 import ru.yandex.practicum.smarthometech.commerce.warehouse.application.WarehouseService;
 
 @RestController
