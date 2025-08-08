@@ -30,7 +30,7 @@ public class Product {
     private UUID productId;
 
     @Column(name = "name", nullable = false)
-    String name;
+    String productName;
 
     @Column(name = "description", columnDefinition = "TEXT")
     String description;
@@ -64,12 +64,12 @@ public class Product {
         if (productId != null && product.productId != null) {
             return productId.equals(product.productId);
         }
-        return name.equals(product.name);
+        return productName.equals(product.productName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(productName);
     }
 
 }

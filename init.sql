@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS shopping_store.products
 (
     product_id       UUID PRIMARY KEY,
 
-    name             VARCHAR(255) NOT NULL UNIQUE,
+    name             VARCHAR(255) NOT NULL,
     description      TEXT,
     image_src        VARCHAR(255),
 
