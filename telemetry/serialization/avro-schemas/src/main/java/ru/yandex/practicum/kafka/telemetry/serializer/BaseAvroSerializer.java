@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.serialization;
+package ru.yandex.practicum.kafka.telemetry.serializer;
 
 import org.apache.avro.generic.GenericContainer;
 import org.apache.avro.io.BinaryEncoder;
@@ -11,7 +11,7 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class CustomAvroSerializer<T extends GenericContainer> implements Serializer<T> {
+public class BaseAvroSerializer<T extends GenericContainer> implements Serializer<T> {
 
     @Override
     public byte[] serialize(String topic, T data) {
