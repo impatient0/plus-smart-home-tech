@@ -70,13 +70,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorDto> handleGenericException(Exception ex, HttpServletRequest request) {
 
-        log.error("An unexpected error occurred: {}", ex.getMessage(), ex);
         ApiErrorDto errorDto = new ApiErrorDto()
             .timestamp(OffsetDateTime.now())
             .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
             .errorCode("INTERNAL_SERVER_ERROR")
             .message("An unexpected error occurred.")
-            .path(request.getRequestURI());
+            .path(request.getRequestURI())
+            .details(Map.of("originalMessage", ex.getMessage()));
 
         return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
