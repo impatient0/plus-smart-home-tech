@@ -1,7 +1,6 @@
 package ru.yandex.practicum.smarthometech.commerce.cart.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.Objects;
@@ -21,11 +20,9 @@ public class CartItem {
     @JoinColumn(name = "shopping_cart_id", nullable = false)
     private ShoppingCart shoppingCart;
 
-    @NotNull
     @Column(name = "product_id", nullable = false)
     private UUID productId;
 
-    @NotNull
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 

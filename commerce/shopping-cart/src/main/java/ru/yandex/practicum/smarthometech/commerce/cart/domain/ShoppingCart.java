@@ -1,7 +1,6 @@
 package ru.yandex.practicum.smarthometech.commerce.cart.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.HashSet;
@@ -20,7 +19,6 @@ public class ShoppingCart {
     @Column(name = "shopping_cart_id")
     private UUID shoppingCartId;
 
-    @NotBlank
     @Column(name = "username", nullable = false)
     private String username;
 

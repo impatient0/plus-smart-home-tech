@@ -1,7 +1,6 @@
 package ru.yandex.practicum.smarthometech.commerce.warehouse.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,27 +20,21 @@ public class WarehouseItem {
     @Column(name = "product_id")
     private UUID productId;
 
-    @NotNull
     @Column(name = "quantity", nullable = false)
     private Long quantity = 0L;
 
-    @NotNull
     @Column(name = "weight_kg", nullable = false)
     private BigDecimal weightKg;
 
-    @NotNull
     @Column(name = "width_m", nullable = false)
     private BigDecimal widthM;
 
-    @NotNull
     @Column(name = "height_m", nullable = false)
     private BigDecimal heightM;
 
-    @NotNull
     @Column(name = "depth_m", nullable = false)
     private BigDecimal depthM;
 
-    @NotNull
     @Column(name = "is_fragile", nullable = false)
     private Boolean isFragile = false;
 
