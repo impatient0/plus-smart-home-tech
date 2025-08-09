@@ -1,0 +1,51 @@
+server:
+  port: 0
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/commerce_shopping_cart
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    ru.yandex.practicum: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 5000
+      warehouse:
+        errorDecoder: warehouseErrorDecoder
+
+  circuitbreaker:
+    enabled: true
+    group:
+      enabled: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      warehouse:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        slidingWindowSize: 20
+        minimumNumberOfCalls: 10
+        slowCallRateThreshold: 100
+        slowCallDurationThreshold: 2s
+
+  timelimiter:
+    instances:
+      warehouse:
+        timeoutDuration: 3s

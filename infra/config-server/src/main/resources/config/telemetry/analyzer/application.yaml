@@ -10,9 +10,12 @@ spring:
         max.poll.interval.ms: 30000
   datasource:
     url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/smart_home_tech}
-    username: ${DATASOURCE_USERNAME:postgres}
-    password: ${DATASOURCE_PASSWORD:postgres}
+    username: ${DATASOURCE_USERNAME:analyzer_user}
+    password: ${DATASOURCE_PASSWORD:analyzer_password}
   jpa:
+    properties:
+      hibernate:
+        default_schema: analyzer
     hibernate:
       ddl-auto: update
 
@@ -31,7 +34,7 @@ grpc:
 
 management:
   server:
-    port: ${HEALTHCHECK_PORT:8082}
+    port: 8082
   endpoints:
     web:
       exposure:

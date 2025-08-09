@@ -1,0 +1,21 @@
+server:
+  port: 0
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/commerce_warehouse
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    ru.yandex.practicum: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"

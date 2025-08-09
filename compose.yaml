@@ -9,7 +9,6 @@ services:
       - "8761:8761"
     environment:
       EUREKA_HOSTNAME: discovery-server
-      PORT: 8761
     restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:8761/actuator/health || exit 1" ]
@@ -144,10 +143,8 @@ services:
         retries: 5
         start_period: 5s
       environment:
-        SPRING_PROFILES_ACTIVE: docker
         EUREKA_URI: http://discovery-server:8761/eureka/
-        GRPC_PORT: 9090
-        HEALTHCHECK_PORT: 9091
+        KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
   aggregator-service:
       build:
@@ -169,9 +166,8 @@ services:
         retries: 5
         start_period: 5s
       environment:
-        SPRING_PROFILES_ACTIVE: docker
         EUREKA_URI: http://discovery-server:8761/eureka/
-        HEALTHCHECK_PORT: 8080
+        KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
   analyzer-service:
       build:
@@ -195,6 +191,8 @@ services:
         retries: 5
         start_period: 5s
       environment:
-        SPRING_PROFILES_ACTIVE: docker
         EUREKA_URI: http://discovery-server:8761/eureka/
-        HEALTHCHECK_PORT: 8082
+        DATASOURCE_URL: jdbc:postgresql://postgres:5432/smart_home_tech
+        DATASOURCE_USERNAME: analyzer_user
+        DATASOURCE_PASSWORD: analyzer_password
+        KAFKA_BOOTSTRAP_SERVERS: kafka:29092

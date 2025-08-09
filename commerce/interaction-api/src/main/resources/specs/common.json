@@ -1,0 +1,62 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Smart Home Technologies - Common API Components",
+    "version": "1.0"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "ApiErrorDto": {
+        "type": "object",
+        "required": [
+          "timestamp",
+          "status",
+          "errorCode",
+          "message"
+        ],
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time the error occurred, in ISO-8601 format."
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The HTTP status code (e.g., 404, 400)."
+          },
+          "errorCode": {
+            "type": "string",
+            "description": "A stable, machine-readable error code for the client to use.",
+            "example": "PRODUCT_NOT_FOUND"
+          },
+          "message": {
+            "type": "string",
+            "description": "A clear, human-readable message explaining the error."
+          },
+          "path": {
+            "type": "string",
+            "description": "The request path that caused the error."
+          },
+          "details": {
+            "type": "object",
+            "description": "Optional, context-specific details about the error.",
+            "additionalProperties": true,
+            "example": {
+              "productId": "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+            }
+          }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": { "type": "integer" },
+          "size": { "type": "integer" },
+          "sort": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

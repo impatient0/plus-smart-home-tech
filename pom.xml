@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -40,6 +40,7 @@
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <avro-maven-plugin.version>${avro.version}</avro-maven-plugin.version>
         <protobuf-plugin.version>2.4.0</protobuf-plugin.version>
+        <openapi-generator.version>7.14.0</openapi-generator.version>
     </properties>
 
     <dependencyManagement>
@@ -149,6 +150,11 @@
                     <groupId>io.github.ascopes</groupId>
                     <artifactId>protobuf-maven-plugin</artifactId>
                     <version>${protobuf-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.openapitools</groupId>
+                    <artifactId>openapi-generator-maven-plugin</artifactId>
+                    <version>7.14.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
