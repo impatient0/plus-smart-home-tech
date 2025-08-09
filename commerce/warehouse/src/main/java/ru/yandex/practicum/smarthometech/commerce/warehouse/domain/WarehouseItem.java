@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "warehouse_items", schema = "warehouse")
+@Table(name = "warehouse_items")
 @Getter
 @Setter
 @ToString
@@ -45,7 +45,6 @@ public class WarehouseItem {
     @Column(name = "is_fragile", nullable = false)
     private Boolean isFragile = false;
 
-    // Use a robust equals/hashCode based on the immutable primary key.
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

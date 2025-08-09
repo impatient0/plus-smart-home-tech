@@ -3,13 +3,10 @@ server:
 
 spring:
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/smart_home_tech}
-    username: ${DATASOURCE_USERNAME:cart_user}
-    password: ${DATASOURCE_PASSWORD:cart_password}
+    url: jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/commerce_shopping_cart
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
   jpa:
-    properties:
-      hibernate:
-        default_schema: shopping_cart
     hibernate:
       ddl-auto: update
 

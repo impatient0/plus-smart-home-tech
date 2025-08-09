@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "cart_items", schema = "shopping_cart")
+@Table(name = "cart_items")
 @Getter
 @Setter
 public class CartItem {

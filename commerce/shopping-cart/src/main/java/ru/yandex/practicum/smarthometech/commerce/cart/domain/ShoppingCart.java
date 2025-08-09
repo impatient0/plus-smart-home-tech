@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "shopping_carts", schema = "shopping_cart")
+@Table(name = "shopping_carts")
 @Getter
 @Setter
 public class ShoppingCart {
@@ -21,26 +21,21 @@ public class ShoppingCart {
     private UUID shoppingCartId;
 
     @NotBlank
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false)
     private String username;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private CartStatus status = CartStatus.ACTIVE;
 
-    // This is the parent side of the relationship.
-    // CascadeType.ALL means if we save the cart, its items are also saved.
-    // orphanRemoval=true means if we remove an item from this Set, it gets deleted from the database.
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<CartItem> items = new HashSet<>();
 
-    // Helper method to easily add an item
     public void addItem(CartItem item) {
         items.add(item);
         item.setShoppingCart(this);
     }
 
-    // A business key (username) is good for equals/hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

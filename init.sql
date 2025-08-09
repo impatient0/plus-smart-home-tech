@@ -2,18 +2,12 @@
 -- STEP 1: CREATE ROLES (USERS)
 -- =================================================================
 CREATE ROLE analyzer_user WITH LOGIN PASSWORD 'analyzer_password';
-CREATE ROLE store_user WITH LOGIN PASSWORD 'store_password';
-CREATE ROLE cart_user WITH LOGIN PASSWORD 'cart_password';
-CREATE ROLE warehouse_user WITH LOGIN PASSWORD 'warehouse_password';
 
 
 -- =================================================================
 -- STEP 2: CREATE SCHEMAS
 -- =================================================================
 CREATE SCHEMA IF NOT EXISTS analyzer;
-CREATE SCHEMA IF NOT EXISTS shopping_cart;
-CREATE SCHEMA IF NOT EXISTS shopping_store;
-CREATE SCHEMA IF NOT EXISTS warehouse;
 
 
 -- =================================================================
@@ -98,105 +92,11 @@ GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA analyzer TO analyzer_user;
 
 
 -- =================================================================
--- SECTION: SHOPPING CART SCHEMA SETUP
+-- SECTION: CREATE COMMERCE DATABASES
 -- =================================================================
-GRANT USAGE, CREATE ON SCHEMA shopping_cart TO cart_user;
-
-ALTER DEFAULT PRIVILEGES FOR ROLE cart_user IN SCHEMA shopping_cart
-   GRANT ALL ON TABLES TO cart_user;
-ALTER DEFAULT PRIVILEGES FOR ROLE cart_user IN SCHEMA shopping_cart
-   GRANT USAGE, SELECT ON SEQUENCES TO cart_user;
-
-SET ROLE cart_user;
-
-CREATE TYPE shopping_cart.cart_status AS ENUM ('ACTIVE', 'DEACTIVATED');
-
-CREATE TABLE IF NOT EXISTS shopping_cart.shopping_carts
-(
-    shopping_cart_id UUID PRIMARY KEY,
-    username         VARCHAR(255) NOT NULL UNIQUE,
-    status           shopping_cart.cart_status NOT NULL DEFAULT 'ACTIVE'
-);
-
-CREATE TABLE IF NOT EXISTS shopping_cart.cart_items
-(
-    id                 BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    shopping_cart_id   UUID NOT NULL REFERENCES shopping_cart.shopping_carts(shopping_cart_id) ON DELETE CASCADE,
-    product_id         UUID NOT NULL,
-    quantity           INTEGER NOT NULL CHECK (quantity > 0),
-
-    UNIQUE (shopping_cart_id, product_id)
-);
-
-RESET ROLE;
-
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA shopping_cart TO cart_user;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA shopping_cart TO cart_user;
-
-
--- =================================================================
--- SECTION: SHOPPING STORE SCHEMA SETUP
--- =================================================================
-GRANT USAGE, CREATE ON SCHEMA shopping_store TO store_user;
-
-ALTER DEFAULT PRIVILEGES FOR ROLE store_user IN SCHEMA shopping_store
-   GRANT ALL ON TABLES TO store_user;
-ALTER DEFAULT PRIVILEGES FOR ROLE store_user IN SCHEMA shopping_store
-   GRANT USAGE, SELECT ON SEQUENCES TO store_user;
-
-SET ROLE store_user;
-
-CREATE TYPE shopping_store.product_category AS ENUM ('LIGHTING', 'CONTROL', 'SENSORS');
-CREATE TYPE shopping_store.product_state AS ENUM ('ACTIVE', 'DEACTIVATE');
-CREATE TYPE shopping_store.quantity_state AS ENUM ('ENDED', 'FEW', 'ENOUGH', 'MANY');
-
-CREATE TABLE IF NOT EXISTS shopping_store.products
-(
-    product_id       UUID PRIMARY KEY,
-
-    name             VARCHAR(255) NOT NULL,
-    description      TEXT,
-    image_src        VARCHAR(255),
-
-    category         shopping_store.product_category NOT NULL,
-    product_state    shopping_store.product_state    NOT NULL,
-    quantity_state   shopping_store.quantity_state   NOT NULL,
-
-    price            NUMERIC(38,2) NOT NULL CHECK (price > 0)
-);
-
-RESET ROLE;
-
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA shopping_store TO store_user;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA shopping_store TO store_user;
-
-
--- =================================================================
--- SECTION: WAREHOUSE SCHEMA SETUP
--- =================================================================
-GRANT USAGE, CREATE ON SCHEMA warehouse TO warehouse_user;
-
-ALTER DEFAULT PRIVILEGES FOR ROLE warehouse_user IN SCHEMA warehouse
-   GRANT ALL ON TABLES TO warehouse_user;
-ALTER DEFAULT PRIVILEGES FOR ROLE warehouse_user IN SCHEMA warehouse
-   GRANT USAGE, SELECT ON SEQUENCES TO warehouse_user;
-
-SET ROLE warehouse_user;
-
-CREATE TABLE IF NOT EXISTS warehouse.warehouse_items
-(
-    product_id  UUID PRIMARY KEY,
-
-    quantity    BIGINT NOT NULL DEFAULT 0 CHECK (quantity >= 0),
-
-    weight_kg   NUMERIC(10, 3) NOT NULL CHECK (weight_kg > 0),
-    width_m     NUMERIC(10, 3) NOT NULL CHECK (width_m > 0),
-    height_m    NUMERIC(10, 3) NOT NULL CHECK (height_m > 0),
-    depth_m     NUMERIC(10, 3) NOT NULL CHECK (depth_m > 0),
-    is_fragile  BOOLEAN NOT NULL DEFAULT FALSE
-);
-
-RESET ROLE;
-
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA warehouse TO warehouse_user;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA warehouse TO warehouse_user;
+CREATE DATABASE commerce_shopping_cart;
+CREATE DATABASE commerce_shopping_store;
+CREATE DATABASE commerce_warehouse;
+CREATE DATABASE commerce_order;
+CREATE DATABASE commerce_delivery;
+CREATE DATABASE commerce_payment;

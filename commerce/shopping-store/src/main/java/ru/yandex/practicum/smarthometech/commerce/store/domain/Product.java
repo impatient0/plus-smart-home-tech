@@ -14,11 +14,9 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.JdbcType;
-import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 @Entity
-@Table(name = "products", schema = "shopping_store")
+@Table(name = "products")
 @Getter
 @Setter
 @ToString
@@ -39,18 +37,15 @@ public class Product {
     String imageSrc;
 
     @Enumerated(EnumType.STRING)
-    @JdbcType(PostgreSQLEnumJdbcType.class)
-    @Column(name = "quantity_state", nullable = false, columnDefinition = "shopping_store.quantity_state")
+    @Column(name = "quantity_state", nullable = false)
     private QuantityState quantityState;
 
     @Enumerated(EnumType.STRING)
-    @JdbcType(PostgreSQLEnumJdbcType.class)
-    @Column(name = "product_state", nullable = false, columnDefinition = "shopping_store.product_state")
+    @Column(name = "product_state", nullable = false)
     private ProductState productState;
 
     @Enumerated(EnumType.STRING)
-    @JdbcType(PostgreSQLEnumJdbcType.class)
-    @Column(name = "category", nullable = false, columnDefinition = "shopping_store.product_category")
+    @Column(name = "category", nullable = false)
     private ProductCategory productCategory;
 
     @Column(name = "price", nullable = false)
