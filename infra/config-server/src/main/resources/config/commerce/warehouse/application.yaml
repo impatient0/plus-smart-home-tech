@@ -19,7 +19,7 @@ logging:
 
 management:
   server:
-    port: 8086
+    port: 8085
   endpoints:
     web:
       exposure:
