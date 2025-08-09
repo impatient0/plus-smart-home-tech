@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.store.ProductDto;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.Product;
@@ -22,6 +23,7 @@ public class ShoppingStoreService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final TransactionTemplate transactionTemplate;
 
     @Transactional(readOnly = true)
     public Page<ProductDto> getProducts(
@@ -38,12 +40,13 @@ public class ShoppingStoreService {
         return products;
     }
 
-    @Transactional
     public ProductDto createNewProduct(ProductDto productDto) {
         log.debug("Creating new product: {}", productDto);
 
-        Product product = productMapper.productDtoToProduct(productDto);
-        Product savedProduct = productRepository.save(product);
+        Product savedProduct = transactionTemplate.execute(status -> {
+            Product product = productMapper.productDtoToProduct(productDto);
+            return productRepository.save(product);
+        });
 
         log.info("New product created with id: {}", savedProduct.getProductId());
         return productMapper.productToProductDto(savedProduct);
