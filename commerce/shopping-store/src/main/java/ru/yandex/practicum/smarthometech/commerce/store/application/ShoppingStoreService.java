@@ -48,6 +48,11 @@ public class ShoppingStoreService {
             return productRepository.save(product);
         });
 
+        if (savedProduct == null) {
+            log.error("Failed to save product, repository returned null inside transaction for: {}", productDto);
+            throw new IllegalStateException("Failed to save product, repository returned null.");
+        }
+
         log.info("New product created with id: {}", savedProduct.getProductId());
         return productMapper.productToProductDto(savedProduct);
     }
