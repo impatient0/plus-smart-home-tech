@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.ProductCategory;
-import ru.yandex.practicum.smarthometech.commerce.store.domain.ProductState;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.Product;
 import ru.yandex.practicum.smarthometech.commerce.store.domain.ProductRepository;
 
@@ -28,8 +27,8 @@ public class JpaProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public Page<Product> findByCategoryAndState(ProductCategory category, ProductState state, Pageable pageable) {
-        return jpaRepository.findByProductCategoryAndProductState(category, state, pageable);
+    public Page<Product> findByCategory(ProductCategory category, Pageable pageable) {
+        return jpaRepository.findByProductCategory(category, pageable);
     }
 
     @Override

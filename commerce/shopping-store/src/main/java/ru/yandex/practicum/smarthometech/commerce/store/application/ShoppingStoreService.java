@@ -31,8 +31,7 @@ public class ShoppingStoreService {
 
         log.debug("Request for products by category: {}, page: {}", domainCategory, pageable);
 
-        Page<Product> productPage = productRepository.findByCategoryAndState(domainCategory,
-            ProductState.ACTIVE, pageable);
+        Page<Product> productPage = productRepository.findByCategory(domainCategory, pageable);
         Page<ProductDto> products = productPage.map(productMapper::productToProductDto);
 
         log.debug("Found {} products on page {}", products.getTotalElements(), products.getNumber());

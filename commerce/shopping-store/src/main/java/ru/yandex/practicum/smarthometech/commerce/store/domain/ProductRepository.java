@@ -9,7 +9,7 @@ public interface ProductRepository {
 
     Optional<Product> findById(UUID productId);
     Product save(Product product);
-    Page<Product> findByCategoryAndState(ProductCategory category, ProductState state, Pageable pageable);
+    Page<Product> findByCategory(ProductCategory category, Pageable pageable);
     boolean existsById(UUID productId);
 
 }
