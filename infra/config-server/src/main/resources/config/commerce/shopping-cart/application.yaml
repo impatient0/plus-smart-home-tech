@@ -1,5 +1,5 @@
 server:
-  port: 8087
+  port: 0
 
 spring:
   datasource:
@@ -12,11 +12,9 @@ spring:
 
 logging:
   level:
-    ru.yandex.practicum: DEBUG
+    ru.yandex.practicum: INFO
 
 management:
-  server:
-    port: 8087
   endpoints:
     web:
       exposure:
