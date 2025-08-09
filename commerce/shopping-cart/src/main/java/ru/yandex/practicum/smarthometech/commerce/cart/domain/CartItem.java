@@ -30,13 +30,15 @@ public class CartItem {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CartItem cartItem = (CartItem) o;
-        return Objects.equals(shoppingCart, cartItem.shoppingCart) &&
-            Objects.equals(productId, cartItem.productId);
+        CartItem that = (CartItem) o;
+        return Objects.equals(this.getProductId(), that.getProductId()) &&
+            Objects.equals(this.getShoppingCart() != null ? this.getShoppingCart().getShoppingCartId() : null,
+                that.getShoppingCart() != null ? that.getShoppingCart().getShoppingCartId() : null);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shoppingCart, productId);
+        return Objects.hash(this.getShoppingCart() != null ? this.getShoppingCart().getShoppingCartId() : null,
+            this.getProductId());
     }
 }
