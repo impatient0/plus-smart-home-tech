@@ -8,11 +8,11 @@ COPY pom.xml .
 COPY infra/pom.xml ./infra/
 COPY infra/config-server/pom.xml ./infra/config-server/
 
-RUN mvn install -N
-RUN mvn install -N -f infra/pom.xml
+RUN --mount=type=cache,target=/root/.m2 mvn install -N
+RUN --mount=type=cache,target=/root/.m2 mvn install -N -f infra/pom.xml
 
 # Download and cache dependencies
-RUN mvn -f infra/config-server/pom.xml dependency:go-offline
+RUN --mount=type=cache,target=/root/.m2 mvn -f infra/config-server/pom.xml dependency:go-offline
 
 # Copy configs
 WORKDIR /app/infra/config-server/src/main/resources/config/telemetry
@@ -23,7 +23,7 @@ COPY telemetry/analyzer/src/main/resources/application.yaml ./analyzer/
 # Build the config server application
 WORKDIR /app
 COPY infra/config-server ./infra/config-server
-RUN mvn -f infra/config-server/pom.xml package -DskipTests
+RUN --mount=type=cache,target=/root/.m2 mvn -f infra/config-server/pom.xml package -DskipTests
 
 # Stage 2: Create image
 FROM eclipse-temurin:21-jre-jammy

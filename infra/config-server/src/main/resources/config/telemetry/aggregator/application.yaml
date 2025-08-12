@@ -21,7 +21,7 @@ kafka:
 
 management:
   server:
-    port: ${HEALTHCHECK_PORT:8080}
+    port: 8080
   endpoints:
     web:
       exposure:
