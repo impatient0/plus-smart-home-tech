@@ -13,6 +13,10 @@ spring:
               filters:
                 - PrefixPath="/api/v1"
                 - Retry=3,"NOT_FOUND","GET","10ms","50ms",2,false,0.5,"100ms"
+                - name: CircuitBreaker
+                  args:
+                    name: "'default-breaker'"
+                    fallbackUri: "'forward:/service-fallback'"
     loadbalancer:
       enabled: true
       retry.enabled: true
