@@ -1,6 +1,6 @@
 spring:
   application:
-    name: shopping-store
+    name: gateway
   config:
     import: "configserver:"
   cloud:
@@ -19,5 +19,5 @@ eureka:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/}
   instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    leaseRenewalIntervalInSeconds: 10
