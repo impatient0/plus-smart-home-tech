@@ -542,32 +542,6 @@
   },
   "components": {
     "schemas": {
-      "AddressDto": {
-        "type": "object",
-        "properties": {
-          "country": {
-            "type": "string",
-            "description": "Страна."
-          },
-          "city": {
-            "type": "string",
-            "description": "Город."
-          },
-          "street": {
-            "type": "string",
-            "description": "Улица."
-          },
-          "house": {
-            "type": "string",
-            "description": "Дом."
-          },
-          "flat": {
-            "type": "string",
-            "description": "Квартира."
-          }
-        },
-        "description": "Представление адреса в системе."
-      },
       "CreateNewOrderRequest": {
         "required": [
           "deliveryAddress",
@@ -576,37 +550,12 @@
         "type": "object",
         "properties": {
           "shoppingCart": {
-            "$ref": "#/components/schemas/ShoppingCartDto"
+            "$ref": "./shopping-cart.json#/components/schemas/ShoppingCartDto"
           },
           "deliveryAddress": {
-            "$ref": "#/components/schemas/AddressDto"
+            "$ref": "./warehouse.json#/components/schemas/AddressDto"
           }
         }
-      },
-      "ShoppingCartDto": {
-        "required": [
-          "products",
-          "shoppingCartId"
-        ],
-        "type": "object",
-        "properties": {
-          "shoppingCartId": {
-            "type": "string",
-            "description": "Идентификатор корзины в БД",
-            "format": "uuid",
-            "example": "53aa35c8-e659-44b2-882f-f6056e443c99"
-          },
-          "products": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "integer",
-              "description": "Отображение идентификатора товара на отобранное количество.",
-              "format": "int64"
-            },
-            "description": "Отображение идентификатора товара на отобранное количество."
-          }
-        },
-        "description": "Корзина товаров в онлайн магазине."
       },
       "OrderDto": {
         "required": [

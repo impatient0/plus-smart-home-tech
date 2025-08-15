@@ -64,7 +64,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ShoppingCartDto"
+                "$ref": "./shopping-cart.json#/components/schemas/ShoppingCartDto"
               }
             }
           },
@@ -233,31 +233,6 @@
           }
         },
         "description": "Запрос на передачу в доставку товаров."
-      },
-      "ShoppingCartDto": {
-        "required": [
-          "products",
-          "shoppingCartId"
-        ],
-        "type": "object",
-        "properties": {
-          "shoppingCartId": {
-            "type": "string",
-            "description": "Идентификатор корзины в БД",
-            "format": "uuid",
-            "example": "53aa35c8-e659-44b2-882f-f6056e443c99"
-          },
-          "products": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "integer",
-              "description": "Отображение идентификатора товара на отобранное количество.",
-              "format": "int64"
-            },
-            "description": "Отображение идентификатора товара на отобранное количество."
-          }
-        },
-        "description": "Корзина товаров в онлайн магазине."
       },
       "BookedProductsDto": {
         "required": [

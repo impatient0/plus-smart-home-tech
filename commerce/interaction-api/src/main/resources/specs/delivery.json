@@ -160,7 +160,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/OrderDto"
+                "$ref": "./order.json#/components/schemas/OrderDto"
               }
             }
           },
@@ -193,32 +193,6 @@
   },
   "components": {
     "schemas": {
-      "AddressDto": {
-        "type": "object",
-        "properties": {
-          "country": {
-            "type": "string",
-            "description": "Страна."
-          },
-          "city": {
-            "type": "string",
-            "description": "Город."
-          },
-          "street": {
-            "type": "string",
-            "description": "Улица."
-          },
-          "house": {
-            "type": "string",
-            "description": "Дом."
-          },
-          "flat": {
-            "type": "string",
-            "description": "Квартира."
-          }
-        },
-        "description": "Представление адреса в системе."
-      },
       "DeliveryDto": {
         "required": [
           "deliveryId",
@@ -235,10 +209,10 @@
             "format": "uuid"
           },
           "fromAddress": {
-            "$ref": "#/components/schemas/AddressDto"
+            "$ref": "./warehouse.json#/components/schemas/AddressDto"
           },
           "toAddress": {
-            "$ref": "#/components/schemas/AddressDto"
+            "$ref": "./warehouse.json#/components/schemas/AddressDto"
           },
           "orderId": {
             "type": "string",
@@ -260,91 +234,6 @@
           "FAILED",
           "CANCELLED"
         ]
-      },
-      "OrderDto": {
-        "required": [
-          "orderId",
-          "products"
-        ],
-        "type": "object",
-        "properties": {
-          "orderId": {
-            "type": "string",
-            "description": "Идентификатор заказа.",
-            "format": "uuid"
-          },
-          "shoppingCartId": {
-            "type": "string",
-            "description": "Идентификатор корзины.",
-            "format": "uuid",
-            "nullable": true
-          },
-          "products": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "integer",
-              "description": "Отображение идентификатора товара на отобранное количество.",
-              "format": "int64"
-            },
-            "description": "Отображение идентификатора товара на отобранное количество."
-          },
-          "paymentId": {
-            "type": "string",
-            "description": "Идентификатор оплаты.",
-            "format": "uuid"
-          },
-          "deliveryId": {
-            "type": "string",
-            "description": "Идентификатор доставки.",
-            "format": "uuid"
-          },
-          "state": {
-            "type": "string",
-            "description": "Статус заказа.",
-            "enum": [
-              "NEW",
-              "ON_PAYMENT",
-              "ON_DELIVERY",
-              "DONE",
-              "DELIVERED",
-              "ASSEMBLED",
-              "PAID",
-              "COMPLETED",
-              "DELIVERY_FAILED",
-              "ASSEMBLY_FAILED",
-              "PAYMENT_FAILED",
-              "PRODUCT_RETURNED",
-              "CANCELED"
-            ]
-          },
-          "deliveryWeight": {
-            "type": "number",
-            "description": "Общий вес доставки.",
-            "format": "double"
-          },
-          "deliveryVolume": {
-            "type": "number",
-            "description": "Общий объём доставки.",
-            "format": "double"
-          },
-          "fragile": {
-            "type": "boolean",
-            "description": "Признак хрупкости заказа."
-          },
-          "totalPrice": {
-            "type": "number",
-            "description": "Общая стоимость."
-          },
-          "deliveryPrice": {
-            "type": "number",
-            "description": "Стоимость доставки."
-          },
-          "productPrice": {
-            "type": "number",
-            "description": "Стоимость товаров в заказе."
-          }
-        },
-        "description": "Представление заказа в системе."
       }
     }
   }
