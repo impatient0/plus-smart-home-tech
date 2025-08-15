@@ -52,6 +52,60 @@
         }
       }
     },
+    "/api/v1/warehouse/shipped": {
+      "post": {
+        "tags": [
+          "Склад магазина"
+        ],
+        "description": "Передать товары в доставку.",
+        "operationId": "shippedToDelivery",
+        "requestBody": {
+          "description": "Запрос на передачу в доставку.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippedToDeliveryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/warehouse/return": {
+      "post": {
+        "tags": [
+          "Склад магазина"
+        ],
+        "description": "Принять возврат товаров на склад.",
+        "operationId": "acceptReturn",
+        "requestBody": {
+          "description": "Отображение идентификатора товара на отобранное количество.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/warehouse/check": {
       "post": {
         "tags": [
@@ -87,6 +141,48 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/BookedProductsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/warehouse/assembly": {
+      "post": {
+        "tags": [
+          "Склад магазина"
+        ],
+        "description": "Собрать товары к заказу для подготовки к отправке.",
+        "operationId": "assemblyProductsForOrder",
+        "requestBody": {
+          "description": "Корзина товаров.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssemblyProductsForOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Общие сведения по бронированию",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookedProductsDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Ошибка, товар не находится в требуемом количестве на складе",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
                 }
               }
             }
