@@ -1,0 +1,44 @@
+server:
+  port: 8888
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lowerCaseServiceId: true
+              filters:
+                - PrefixPath="/api/v1"
+                - Retry=3,"NOT_FOUND","GET","10ms","50ms",2,false,0.5,"100ms"
+                - name: CircuitBreaker
+                  args:
+                    name: "'default-breaker'"
+                    fallbackUri: "'forward:/service-fallback'"
+    loadbalancer:
+      enabled: true
+      retry.enabled: true
+      cache.ttl: 30s
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 20
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2s
+
+    instances:
+      default-breaker:
+        baseConfig: default
+
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 4s
