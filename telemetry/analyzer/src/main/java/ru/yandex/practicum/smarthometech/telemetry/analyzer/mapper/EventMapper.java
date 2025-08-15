@@ -88,8 +88,10 @@ public interface EventMapper {
     @Mapping(target = "hubId", ignore = true)
     Sensor toSensorEntity(String sensorId);
 
+    @Mapping(target = "id", ignore = true)
     Condition toConditionEntity(ScenarioConditionAvro avroCondition);
 
+    @Mapping(target = "id", ignore = true)
     Action toActionEntity(DeviceActionAvro avroAction);
 
     String conditionTypeToString(ConditionTypeAvro avroEnum);
