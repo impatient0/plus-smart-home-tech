@@ -101,7 +101,7 @@
         }
       }
     },
-    "/api/v1/payment/refund": {
+    "/api/v1/payment/successful": {
       "post": {
         "tags": [
           "Платежный шлюз"
