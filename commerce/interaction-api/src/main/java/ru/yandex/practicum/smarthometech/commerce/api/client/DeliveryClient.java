@@ -16,13 +16,13 @@ public interface DeliveryClient {
     DeliveryDto planDelivery(@RequestBody DeliveryDto delivery);
 
     @PostMapping("/successful")
-    UUID setDeliverySuccessful(@RequestBody UUID deliveryId);
+    void setDeliverySuccessful(@RequestBody UUID deliveryId);
 
     @PostMapping("/failed")
-    UUID setDeliveryFailed(@RequestBody UUID deliveryId);
+    void setDeliveryFailed(@RequestBody UUID deliveryId);
 
     @PostMapping("/picked")
-    UUID setDeliveryPickedUp(@RequestBody UUID deliveryId);
+    void setDeliveryPickedUp(@RequestBody UUID deliveryId);
 
     @PostMapping("/cost")
     BigDecimal getDeliveryCost(@RequestBody OrderDto order);
