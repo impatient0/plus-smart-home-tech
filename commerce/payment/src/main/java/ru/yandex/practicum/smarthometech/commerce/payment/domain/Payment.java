@@ -50,6 +50,6 @@ public class Payment {
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId);
+        return Objects.hash(paymentId);
     }
 }
