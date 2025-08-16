@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/payment") // Centralize the base path for clarity
+@RequestMapping("/api/v1/payment")
 @RequiredArgsConstructor
 public class PaymentController implements PaymentClient {
 
@@ -39,7 +39,7 @@ public class PaymentController implements PaymentClient {
     }
 
     @Override
-    @PostMapping("/successful") // Path corrected from your client spec's '/refund'
+    @PostMapping("/successful")
     public void setPaymentSuccessful(@RequestBody UUID paymentId) {
         paymentService.setPaymentSuccessful(paymentId);
     }
