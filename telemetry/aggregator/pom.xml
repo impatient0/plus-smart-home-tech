@@ -16,6 +16,7 @@
       <groupId>ru.yandex.practicum</groupId>
       <artifactId>telemetry-commons</artifactId>
       <version>${project.version}</version>
+      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>org.springframework.cloud</groupId>
