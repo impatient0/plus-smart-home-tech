@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -57,15 +56,6 @@ public class Delivery {
 
     @Column(name = "to_flat")
     private String toFlat;
-
-    @Column(name = "delivery_weight_kg", precision = 10, scale = 3)
-    private BigDecimal deliveryWeightKg;
-
-    @Column(name = "delivery_volume_m3", precision = 10, scale = 3)
-    private BigDecimal deliveryVolumeM3;
-
-    @Column(name = "is_fragile")
-    private Boolean isFragile;
 
     @Override
     public boolean equals(Object o) {
