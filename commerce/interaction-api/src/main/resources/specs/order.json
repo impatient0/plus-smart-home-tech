@@ -195,6 +195,49 @@
         }
       }
     },
+    "/api/v1/order/payment/successful": {
+      "post": {
+        "tags": [
+          "Обработка заказов"
+        ],
+        "description": "Оплата заказа прошла успешно.",
+        "operationId": "paymentSuccessful",
+        "requestBody": {
+          "description": "Идентификатор заказа.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Заказ пользователя после успешной оплаты",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Не найден заказ",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/order/payment/failed": {
       "post": {
         "tags": [
@@ -260,6 +303,49 @@
         "responses": {
           "200": {
             "description": "Заказ пользователя после доставки",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Не найден заказ",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/order/delivery/successful": {
+      "post": {
+        "tags": [
+          "Обработка заказов"
+        ],
+        "description": "Доставка заказа прошла успешно.",
+        "operationId": "deliverySuccessful",
+        "requestBody": {
+          "description": "Идентификатор заказа.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Заказ пользователя после успешной доставки",
             "content": {
               "*/*": {
                 "schema": {
@@ -475,6 +561,49 @@
         "responses": {
           "200": {
             "description": "Заказ пользователя после сборки",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Не найден заказ",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/order/assembly/successful": {
+      "post": {
+        "tags": [
+          "Обработка заказов"
+        ],
+        "description": "Сборка заказа прошла успешно.",
+        "operationId": "assemblySuccessful",
+        "requestBody": {
+          "description": "Идентификатор заказа.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Заказ пользователя после успешной сборки",
             "content": {
               "*/*": {
                 "schema": {
