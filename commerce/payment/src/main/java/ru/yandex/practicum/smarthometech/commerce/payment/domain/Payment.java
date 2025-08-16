@@ -1,16 +1,13 @@
 package ru.yandex.practicum.smarthometech.commerce.payment.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.math.BigDecimal;
-import java.util.UUID;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.Objects;
+import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Table(name = "payments")
@@ -20,6 +17,7 @@ import lombok.ToString;
 public class Payment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "payment_id")
     private UUID paymentId;
 
@@ -52,6 +50,6 @@ public class Payment {
 
     @Override
     public int hashCode() {
-        return paymentId != null ? paymentId.hashCode() : 0;
+        return Objects.hash(orderId);
     }
 }
