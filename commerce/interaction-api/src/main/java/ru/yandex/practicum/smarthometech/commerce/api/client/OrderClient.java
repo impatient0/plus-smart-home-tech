@@ -27,11 +27,17 @@ public interface OrderClient {
     @PostMapping("/payment")
     OrderDto initiatePayment(@RequestBody UUID orderId);
 
+    @PostMapping("/payment/successful")
+    OrderDto setPaymentSuccessful(@RequestBody UUID orderId);
+
     @PostMapping("/payment/failed")
     OrderDto setPaymentFailed(@RequestBody UUID orderId);
 
     @PostMapping("/delivery")
     OrderDto setAsDelivered(@RequestBody UUID orderId);
+
+    @PostMapping("/delivery/successful")
+    OrderDto setDeliverySuccessful(@RequestBody UUID orderId);
 
     @PostMapping("/delivery/failed")
     OrderDto setDeliveryFailed(@RequestBody UUID orderId);
@@ -47,6 +53,9 @@ public interface OrderClient {
 
     @PostMapping("/assembly")
     OrderDto startAssembly(@RequestBody UUID orderId);
+
+    @PostMapping("/assembly/successful")
+    OrderDto setAssemblySuccessful(@RequestBody UUID orderId);
 
     @PostMapping("/assembly/failed")
     OrderDto setAssemblyFailed(@RequestBody UUID orderId);
