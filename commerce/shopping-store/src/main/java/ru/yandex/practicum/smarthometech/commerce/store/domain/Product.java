@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class Product {
     @Column(name = "product_id")
     private UUID productId;
 
+    @NotNull
     @Column(name = "name", nullable = false)
     private String productName;
 
@@ -36,18 +38,22 @@ public class Product {
     @Column(name = "image_src")
     private String imageSrc;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "quantity_state", nullable = false)
     private QuantityState quantityState;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "product_state", nullable = false)
     private ProductState productState;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
     private ProductCategory productCategory;
 
+    @NotNull
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 

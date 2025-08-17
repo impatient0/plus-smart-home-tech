@@ -29,7 +29,7 @@ public class BookedItem {
 
     @NotNull
     @Column(name = "quantity", nullable = false)
-    private Integer quantity;
+    private Long quantity;
 
     @Override
     public boolean equals(Object o) {

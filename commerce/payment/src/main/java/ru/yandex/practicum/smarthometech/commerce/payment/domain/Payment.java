@@ -1,6 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.payment.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,21 +22,27 @@ public class Payment {
     @Column(name = "payment_id")
     private UUID paymentId;
 
+    @NotNull
     @Column(name = "order_id", nullable = false)
     private UUID orderId;
 
+    @NotNull
     @Column(name = "product_cost", nullable = false, precision = 10, scale = 2)
     private BigDecimal productCost;
 
+    @NotNull
     @Column(name = "delivery_cost", nullable = false, precision = 10, scale = 2)
     private BigDecimal deliveryCost;
 
+    @NotNull
     @Column(name = "tax_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal taxAmount;
 
+    @NotNull
     @Column(name = "total_payment", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPayment;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private PaymentStatus status;

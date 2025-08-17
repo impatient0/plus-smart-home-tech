@@ -24,10 +24,12 @@ public class OrderBooking {
     @Column(name = "delivery_id")
     private UUID deliveryId;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private BookingStatus status = BookingStatus.ASSEMBLED;
 
+    @NotNull
     @OneToMany(mappedBy = "orderBooking", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<BookedItem> items = new HashSet<>();
 
