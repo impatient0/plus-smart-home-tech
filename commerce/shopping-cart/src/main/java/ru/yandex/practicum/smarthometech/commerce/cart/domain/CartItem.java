@@ -31,14 +31,14 @@ public class CartItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CartItem that = (CartItem) o;
-        return Objects.equals(this.getProductId(), that.getProductId()) &&
-            Objects.equals(this.getShoppingCart() != null ? this.getShoppingCart().getShoppingCartId() : null,
-                that.getShoppingCart() != null ? that.getShoppingCart().getShoppingCartId() : null);
+        return Objects.equals(this.productId, that.productId) && Objects.equals(
+            this.shoppingCart != null ? this.shoppingCart.getShoppingCartId() : null,
+            that.shoppingCart != null ? that.shoppingCart.getShoppingCartId() : null);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getShoppingCart() != null ? this.getShoppingCart().getShoppingCartId() : null,
-            this.getProductId());
+        return Objects.hash(this.shoppingCart != null ? this.shoppingCart.getShoppingCartId() : null,
+            this.productId);
     }
 }
