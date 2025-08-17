@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDto;
+import ru.yandex.practicum.smarthometech.commerce.api.exception.BookingNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.InsufficientQuantityException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductAlreadyExistsException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
@@ -68,6 +69,21 @@ public class GlobalExceptionHandler {
             ));
 
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BookingNotFoundException.class)
+    public ResponseEntity<ApiErrorDto> handleBookingNotFound(BookingNotFoundException ex, HttpServletRequest request) {
+        log.warn("Handling BookingNotFoundException: {}", ex.getMessage());
+
+        ApiErrorDto errorDto = new ApiErrorDto()
+            .timestamp(OffsetDateTime.now())
+            .status(HttpStatus.NOT_FOUND.value())
+            .errorCode("ORDER_BOOKING_NOT_FOUND")
+            .message("A booking for the specified order could not be found.")
+            .path(request.getRequestURI())
+            .details(Map.of("orderId", ex.getOrderId().toString()));
+
+        return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

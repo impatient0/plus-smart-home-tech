@@ -30,6 +30,11 @@ public class JpaWarehouseRepositoryAdapter implements WarehouseRepository {
     }
 
     @Override
+    public List<WarehouseItem> saveAll(Iterable<WarehouseItem> warehouseItems) {
+        return jpaRepository.saveAll(warehouseItems);
+    }
+
+    @Override
     public boolean existsById(UUID productId) {
         return jpaRepository.existsById(productId);
     }

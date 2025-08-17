@@ -1,9 +1,11 @@
 package ru.yandex.practicum.smarthometech.commerce.warehouse.presentation;
 
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.smarthometech.commerce.api.client.WarehouseClient;
@@ -22,6 +24,24 @@ public class WarehouseController implements WarehouseClient {
     @PutMapping
     public void addNewProduct(NewProductInWarehouseRequest request) {
         warehouseService.addNewProduct(request);
+    }
+
+    @Override
+    @PostMapping("/assembly")
+    public BookedProductsDto assembleOrder(@RequestBody AssemblyProductsForOrderRequest request) {
+        return warehouseService.assembleOrder(request);
+    }
+
+    @Override
+    @PostMapping("/shipped")
+    public void markAsShippedToDelivery(@RequestBody ShippedToDeliveryRequest request) {
+        warehouseService.markAsShippedForDelivery(request);
+    }
+
+    @Override
+    @PostMapping("/return")
+    public void acceptProductReturn(@RequestBody Map<String, Long> productsToReturn) {
+        warehouseService.acceptProductReturn(productsToReturn);
     }
 
     @Override
