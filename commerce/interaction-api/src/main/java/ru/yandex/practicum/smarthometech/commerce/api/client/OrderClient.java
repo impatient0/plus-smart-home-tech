@@ -19,7 +19,8 @@ public interface OrderClient {
     List<OrderDto> getClientOrders(@RequestParam("username") String username);
 
     @PutMapping
-    OrderDto createNewOrder(@RequestBody CreateNewOrderRequest createNewOrderRequest);
+    OrderDto createNewOrder(@RequestBody CreateNewOrderRequest createNewOrderRequest,
+        @RequestParam("username") String username);
 
     @PostMapping("/return")
     OrderDto productReturn(@RequestBody ProductReturnRequest productReturnRequest);
@@ -53,9 +54,6 @@ public interface OrderClient {
 
     @PostMapping("/assembly")
     OrderDto startAssembly(@RequestBody UUID orderId);
-
-    @PostMapping("/assembly/successful")
-    OrderDto setAssemblySuccessful(@RequestBody UUID orderId);
 
     @PostMapping("/assembly/failed")
     OrderDto setAssemblyFailed(@RequestBody UUID orderId);
