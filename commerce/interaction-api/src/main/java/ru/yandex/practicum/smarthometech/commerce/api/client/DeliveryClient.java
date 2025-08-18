@@ -1,5 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.api.client;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,17 +15,17 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.order.OrderDto;
 public interface DeliveryClient {
 
     @PutMapping
-    DeliveryDto planDelivery(@RequestBody DeliveryDto delivery);
+    DeliveryDto planDelivery(@Valid @RequestBody DeliveryDto delivery);
 
     @PostMapping("/successful")
-    void setDeliverySuccessful(@RequestBody UUID deliveryId);
+    void setDeliverySuccessful(@NotNull @RequestBody UUID deliveryId);
 
     @PostMapping("/failed")
-    void setDeliveryFailed(@RequestBody UUID deliveryId);
+    void setDeliveryFailed(@NotNull @RequestBody UUID deliveryId);
 
     @PostMapping("/picked")
-    void setDeliveryPickedUp(@RequestBody UUID deliveryId);
+    void setDeliveryPickedUp(@NotNull @RequestBody UUID deliveryId);
 
     @PostMapping("/cost")
-    BigDecimal getDeliveryCost(@RequestBody OrderDto order);
+    BigDecimal getDeliveryCost(@Valid @RequestBody OrderDto order);
 }

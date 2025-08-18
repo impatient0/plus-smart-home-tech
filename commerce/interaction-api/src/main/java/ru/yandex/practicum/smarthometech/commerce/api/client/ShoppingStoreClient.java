@@ -1,5 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.api.client;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
@@ -18,22 +20,22 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.store.QuantityState;
 public interface ShoppingStoreClient {
 
     @GetMapping
-    Page<ProductDto> getProducts(@RequestParam("category") ProductCategory category, Pageable pageable);
+    Page<ProductDto> getProducts(@NotNull @RequestParam("category") ProductCategory category, Pageable pageable);
 
     @PutMapping
-    ProductDto createNewProduct(@RequestBody ProductDto product);
+    ProductDto createNewProduct(@Valid @RequestBody ProductDto product);
 
     @PostMapping
-    ProductDto updateProduct(@RequestBody ProductDto product);
+    ProductDto updateProduct(@Valid @RequestBody ProductDto product);
 
     @PostMapping("/removeProductFromStore")
-    boolean removeProduct(@RequestBody UUID productId);
+    boolean removeProduct(@NotNull @RequestBody UUID productId);
 
     @PostMapping("/quantityState")
-    boolean setStatus(@RequestParam("productId") UUID productId,
-        @RequestParam("quantityState") QuantityState quantityState);
+    boolean setStatus(@NotNull @RequestParam("productId") UUID productId,
+        @NotNull @RequestParam("quantityState") QuantityState quantityState);
 
     @GetMapping("/{productId}")
-    ProductDto getProduct(@PathVariable UUID productId);
+    ProductDto getProduct(@NotNull @PathVariable UUID productId);
 
 }

@@ -1,5 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.api.client;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.Map;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,24 +20,24 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.ShippedToDel
 public interface WarehouseClient {
 
     @PostMapping("/check")
-    BookedProductsDto checkProductQuantity(@RequestBody ShoppingCartDto shoppingCart);
+    BookedProductsDto checkProductQuantity(@Valid @RequestBody ShoppingCartDto shoppingCart);
 
     @PostMapping("/add")
-    void increaseProductQuantity(@RequestBody AddProductToWarehouseRequest product);
+    void increaseProductQuantity(@Valid @RequestBody AddProductToWarehouseRequest product);
 
     @GetMapping("/address")
     AddressDto getWarehouseAddress();
 
     @PutMapping
-    void addNewProduct(@RequestBody NewProductInWarehouseRequest product);
+    void addNewProduct(@Valid @RequestBody NewProductInWarehouseRequest product);
 
     @PostMapping("/assembly")
-    BookedProductsDto assembleOrder(@RequestBody AssemblyProductsForOrderRequest request);
+    BookedProductsDto assembleOrder(@Valid @RequestBody AssemblyProductsForOrderRequest request);
 
     @PostMapping("/shipped")
-    void markAsShippedToDelivery(@RequestBody ShippedToDeliveryRequest request);
+    void markAsShippedToDelivery(@Valid @RequestBody ShippedToDeliveryRequest request);
 
     @PostMapping("/return")
-    void acceptProductReturn(@RequestBody Map<String, Long> productsToReturn);
+    void acceptProductReturn(@NotEmpty @RequestBody Map<String, Long> productsToReturn);
 
 }

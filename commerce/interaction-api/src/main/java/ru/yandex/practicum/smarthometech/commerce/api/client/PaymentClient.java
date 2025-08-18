@@ -1,5 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.api.client;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -12,17 +14,17 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.payment.PaymentDto;
 public interface PaymentClient {
 
     @PostMapping
-    PaymentDto createPayment(@RequestBody OrderDto order);
+    PaymentDto createPayment(@Valid @RequestBody OrderDto order);
 
     @PostMapping("/totalCost")
-    BigDecimal calculateTotalCost(@RequestBody OrderDto orderDto);
+    BigDecimal calculateTotalCost(@Valid @RequestBody OrderDto orderDto);
 
     @PostMapping("/productCost")
-    BigDecimal calculateProductCost(@RequestBody OrderDto orderDto);
+    BigDecimal calculateProductCost(@Valid @RequestBody OrderDto orderDto);
 
     @PostMapping("/successful")
-    void setPaymentSuccessful(@RequestBody UUID paymentId);
+    void setPaymentSuccessful(@NotNull @RequestBody UUID paymentId);
 
     @PostMapping("/failed")
-    void setPaymentFailed(@RequestBody UUID paymentId);
+    void setPaymentFailed(@NotNull @RequestBody UUID paymentId);
 }

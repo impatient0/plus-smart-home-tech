@@ -1,5 +1,8 @@
 package ru.yandex.practicum.smarthometech.commerce.api.client;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,45 +19,45 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.order.ProductReturnReq
 public interface OrderClient {
 
     @GetMapping
-    List<OrderDto> getClientOrders(@RequestParam("username") String username);
+    List<OrderDto> getClientOrders(@NotBlank @RequestParam("username") String username);
 
     @PutMapping
-    OrderDto createNewOrder(@RequestBody CreateNewOrderRequest createNewOrderRequest,
-        @RequestParam("username") String username);
+    OrderDto createNewOrder(@Valid @RequestBody CreateNewOrderRequest createNewOrderRequest,
+        @NotBlank @RequestParam("username") String username);
 
     @PostMapping("/return")
-    OrderDto productReturn(@RequestBody ProductReturnRequest productReturnRequest);
+    OrderDto productReturn(@Valid @RequestBody ProductReturnRequest productReturnRequest);
 
     @PostMapping("/payment")
-    OrderDto initiatePayment(@RequestBody UUID orderId);
+    OrderDto initiatePayment(@NotNull @RequestBody UUID orderId);
 
-    @PostMapping("/payment/successful")
-    OrderDto setPaymentSuccessful(@RequestBody UUID orderId);
+    @PostMapping("/payment-successful")
+    OrderDto setPaymentSuccessful(@NotNull @RequestBody UUID orderId);
 
-    @PostMapping("/payment/failed")
-    OrderDto setPaymentFailed(@RequestBody UUID orderId);
+    @PostMapping("/payment-failed")
+    OrderDto setPaymentFailed(@NotNull @RequestBody UUID orderId);
 
     @PostMapping("/delivery")
-    OrderDto initiateDelivery(@RequestBody UUID orderId);
+    OrderDto initiateDelivery(@NotNull @RequestBody UUID orderId);
 
-    @PostMapping("/delivery/successful")
-    OrderDto setDeliverySuccessful(@RequestBody UUID orderId);
+    @PostMapping("/delivery-successful")
+    OrderDto setDeliverySuccessful(@NotNull @RequestBody UUID orderId);
 
-    @PostMapping("/delivery/failed")
-    OrderDto setDeliveryFailed(@RequestBody UUID orderId);
+    @PostMapping("/delivery-failed")
+    OrderDto setDeliveryFailed(@NotNull @RequestBody UUID orderId);
 
     @PostMapping("/completed")
-    OrderDto markAsCompleted(@RequestBody UUID orderId);
+    OrderDto markAsCompleted(@NotNull @RequestBody UUID orderId);
 
     @PostMapping("/calculate/total")
-    OrderDto calculateTotalCost(@RequestBody UUID orderId);
+    OrderDto calculateTotalCost(@NotNull @RequestBody UUID orderId);
 
     @PostMapping("/calculate/delivery")
-    OrderDto calculateDeliveryCost(@RequestBody UUID orderId);
+    OrderDto calculateDeliveryCost(@NotNull @RequestBody UUID orderId);
 
     @PostMapping("/assembly")
-    OrderDto startAssembly(@RequestBody UUID orderId);
+    OrderDto startAssembly(@NotNull @RequestBody UUID orderId);
 
-    @PostMapping("/assembly/failed")
-    OrderDto setAssemblyFailed(@RequestBody UUID orderId);
+    @PostMapping("/assembly-failed")
+    OrderDto setAssemblyFailed(@NotNull @RequestBody UUID orderId);
 }

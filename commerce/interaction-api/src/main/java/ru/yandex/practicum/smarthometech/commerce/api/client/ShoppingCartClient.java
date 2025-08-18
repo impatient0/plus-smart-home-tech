@@ -1,5 +1,8 @@
 package ru.yandex.practicum.smarthometech.commerce.api.client;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -17,19 +20,19 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.cart.ShoppingCartDto;
 public interface ShoppingCartClient {
 
     @GetMapping
-    ShoppingCartDto getCart(@RequestParam String username);
+    ShoppingCartDto getCart(@NotBlank @RequestParam String username);
 
     @PutMapping
-    ShoppingCartDto addItem(@RequestParam String username, @RequestBody Map<String, Long> items);
+    ShoppingCartDto addItem(@NotBlank @RequestParam String username, @NotEmpty @RequestBody Map<String, Long> items);
 
     @DeleteMapping
-    void deactivateCart(@RequestParam String username);
+    void deactivateCart(@NotBlank @RequestParam String username);
 
     @PostMapping("/remove")
-    ShoppingCartDto removeItem(@RequestParam String username, @RequestBody List<UUID> items);
+    ShoppingCartDto removeItem(@NotBlank @RequestParam String username, @NotEmpty @RequestBody List<UUID> items);
 
     @PostMapping("/change-quantity")
-    ShoppingCartDto changeItemQuantity(@RequestParam String username, @RequestBody
-        ChangeProductQuantityRequest request);
+    ShoppingCartDto changeItemQuantity(@NotBlank @RequestParam String username, @Valid @RequestBody
+    ChangeProductQuantityRequest request);
 
 }
