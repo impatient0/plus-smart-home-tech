@@ -1,6 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.delivery.presentation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/delivery")
 @RequiredArgsConstructor
+@Validated
 public class DeliveryController implements DeliveryClient {
 
     private final DeliveryService deliveryService;

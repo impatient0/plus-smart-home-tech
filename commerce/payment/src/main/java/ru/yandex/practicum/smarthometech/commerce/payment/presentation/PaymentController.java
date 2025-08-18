@@ -1,6 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.payment.presentation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/payment")
 @RequiredArgsConstructor
+@Validated
 public class PaymentController implements PaymentClient {
 
     private final PaymentService paymentService;

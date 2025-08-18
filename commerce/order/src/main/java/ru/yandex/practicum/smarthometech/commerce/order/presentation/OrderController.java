@@ -2,6 +2,7 @@ package ru.yandex.practicum.smarthometech.commerce.order.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.smarthometech.commerce.api.client.OrderClient;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.order.CreateNewOrderRequest;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/order")
 @RequiredArgsConstructor
+@Validated
 public class OrderController implements OrderClient {
 
     private final OrderService orderService;

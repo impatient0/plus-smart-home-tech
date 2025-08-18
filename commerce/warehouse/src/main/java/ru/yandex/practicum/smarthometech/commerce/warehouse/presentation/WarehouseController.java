@@ -2,6 +2,7 @@ package ru.yandex.practicum.smarthometech.commerce.warehouse.presentation;
 
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +17,7 @@ import ru.yandex.practicum.smarthometech.commerce.warehouse.application.Warehous
 @RestController
 @RequestMapping("/api/v1/warehouse")
 @RequiredArgsConstructor
+@Validated
 public class WarehouseController implements WarehouseClient {
 
     private final WarehouseService warehouseService;

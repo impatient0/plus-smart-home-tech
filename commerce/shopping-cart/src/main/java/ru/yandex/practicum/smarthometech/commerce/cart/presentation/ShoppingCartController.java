@@ -1,6 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.cart.presentation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.smarthometech.commerce.api.client.ShoppingCartClient;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.cart.ChangeProductQuantityRequest;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/shopping-cart")
 @RequiredArgsConstructor
+@Validated
 public class ShoppingCartController implements ShoppingCartClient {
 
     private final ShoppingCartService cartService;
