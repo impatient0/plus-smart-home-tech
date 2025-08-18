@@ -36,17 +36,7 @@ public class PaymentService {
 
         BigDecimal productCost = calculateProductCost(orderDto);
         BigDecimal deliveryCost = orderDto.getDeliveryPrice() == null ? BigDecimal.ZERO : orderDto.getDeliveryPrice();
-        BigDecimal tax = productCost.multiply(TAX_RATE);
-        BigDecimal totalPayment = productCost.add(tax).add(deliveryCost);
-
-        Payment newPayment = new Payment();
-        newPayment.setPaymentId(UUID.randomUUID());
-        newPayment.setOrderId(orderDto.getOrderId());
-        newPayment.setProductCost(productCost.setScale(2, RoundingMode.HALF_UP));
-        newPayment.setDeliveryCost(deliveryCost.setScale(2, RoundingMode.HALF_UP));
-        newPayment.setTaxAmount(tax.setScale(2, RoundingMode.HALF_UP));
-        newPayment.setTotalPayment(totalPayment.setScale(2, RoundingMode.HALF_UP));
-        newPayment.setStatus(PaymentStatus.PENDING);
+        Payment newPayment = getPayment(orderDto, productCost, deliveryCost);
 
         Payment savedPayment = paymentRepository.save(newPayment);
         log.info("Payment record {} created for order {}", savedPayment.getPaymentId(), savedPayment.getOrderId());
@@ -117,5 +107,20 @@ public class PaymentService {
     private Payment findPaymentById(UUID paymentId) {
         return paymentRepository.findById(paymentId)
             .orElseThrow(() -> new PaymentNotFoundException(paymentId));
+    }
+
+    private static Payment getPayment(OrderDto orderDto, BigDecimal productCost,
+        BigDecimal deliveryCost) {
+        BigDecimal tax = productCost.multiply(TAX_RATE);
+        BigDecimal totalPayment = productCost.add(tax).add(deliveryCost);
+
+        Payment newPayment = new Payment();
+        newPayment.setOrderId(orderDto.getOrderId());
+        newPayment.setProductCost(productCost.setScale(2, RoundingMode.HALF_UP));
+        newPayment.setDeliveryCost(deliveryCost.setScale(2, RoundingMode.HALF_UP));
+        newPayment.setTaxAmount(tax.setScale(2, RoundingMode.HALF_UP));
+        newPayment.setTotalPayment(totalPayment.setScale(2, RoundingMode.HALF_UP));
+        newPayment.setStatus(PaymentStatus.PENDING);
+        return newPayment;
     }
 }
