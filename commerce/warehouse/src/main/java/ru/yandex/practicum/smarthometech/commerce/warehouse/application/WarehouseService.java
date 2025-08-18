@@ -20,6 +20,7 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.cart.ShoppingCartDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.ShippedToDeliveryRequest;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.BookingNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.InsufficientQuantityException;
+import ru.yandex.practicum.smarthometech.commerce.api.exception.OrderBookingAlreadyExistsException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductAlreadyExistsException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.warehouse.domain.BookedItem;
@@ -124,6 +125,11 @@ public class WarehouseService {
     @Transactional
     public BookedProductsDto assembleOrder(AssemblyProductsForOrderRequest request) {
         log.debug("Attempting to assemble order with id: {}", request.getOrderId());
+
+        if (bookingRepository.existsById(request.getOrderId())) {
+            log.warn("Order booking for id: {} already exists.", request.getOrderId());
+            throw new OrderBookingAlreadyExistsException(request.getOrderId());
+        }
 
         OrderBooking booking = new OrderBooking();
         booking.setOrderId(request.getOrderId());
