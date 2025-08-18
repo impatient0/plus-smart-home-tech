@@ -87,7 +87,6 @@ public class DeliveryService {
         delivery.setStatus(DeliveryStatus.IN_PROGRESS);
         deliveryRepository.save(delivery);
 
-        orderClient.setAssemblySuccessful(delivery.getOrderId());
         warehouseClient.markAsShippedToDelivery(
             new ShippedToDeliveryRequest().orderId(delivery.getOrderId()).deliveryId(deliveryId)
         );

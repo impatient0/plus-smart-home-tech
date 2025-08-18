@@ -31,10 +31,6 @@ public class OrderItem {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
-    @NotNull
-    @Column(name = "price_per_unit", nullable = false, precision = 10, scale = 2)
-    private BigDecimal priceSnapshot;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

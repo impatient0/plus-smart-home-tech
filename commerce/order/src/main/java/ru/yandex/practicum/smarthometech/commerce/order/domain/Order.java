@@ -46,8 +46,8 @@ public class Order {
     @Column(name = "delivery_address_street", nullable = false)
     private String deliveryAddressStreet; // stored for history
 
-    @Column(name = "product_price", precision = 10, scale = 2)
-    private BigDecimal productPrice;
+    @Column(name = "fee", precision = 10, scale = 2)
+    private BigDecimal fee;
 
     @Column(name = "delivery_price", precision = 10, scale = 2)
     private BigDecimal deliveryPrice;
