@@ -19,3 +19,16 @@ management:
     web:
       exposure:
         include: "health,info"
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 5000
+      warehouse:
+        errorDecoder: warehouseErrorDecoder
+      delivery:
+        errorDecoder: deliveryErrorDecoder
+      payment:
+        errorDecoder: paymentErrorDecoder

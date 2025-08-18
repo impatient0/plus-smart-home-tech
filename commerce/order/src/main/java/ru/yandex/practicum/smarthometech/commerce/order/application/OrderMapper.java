@@ -7,7 +7,6 @@ import ru.yandex.practicum.smarthometech.commerce.order.domain.Order;
 import ru.yandex.practicum.smarthometech.commerce.order.domain.OrderItem;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -25,7 +24,7 @@ public interface OrderMapper {
         dto.setDeliveryId(order.getDeliveryId());
         dto.setState(StateEnum.fromValue(order.getStatus().name()));
 
-        dto.setProductPrice(order.getProductPrice());
+        dto.setProductPrice(order.getTotalPrice().subtract(order.getDeliveryPrice()).subtract(order.getFee()));
         dto.setDeliveryPrice(order.getDeliveryPrice());
         dto.setTotalPrice(order.getTotalPrice());
 
