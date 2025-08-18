@@ -7,8 +7,6 @@ public interface PaymentRepository {
 
     Optional<Payment> findById(UUID paymentId);
 
-    Optional<Payment> findByOrderId(UUID orderId);
-
     Payment save(Payment payment);
 
 }

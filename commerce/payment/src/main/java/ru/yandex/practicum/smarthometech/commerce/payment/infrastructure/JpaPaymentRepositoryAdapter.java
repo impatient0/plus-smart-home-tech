@@ -20,11 +20,6 @@ public class JpaPaymentRepositoryAdapter implements PaymentRepository {
     }
 
     @Override
-    public Optional<Payment> findByOrderId(UUID orderId) {
-        return jpaRepository.findByOrderId(orderId);
-    }
-
-    @Override
     public Payment save(Payment payment) {
         return jpaRepository.saveAndFlush(payment);
     }
