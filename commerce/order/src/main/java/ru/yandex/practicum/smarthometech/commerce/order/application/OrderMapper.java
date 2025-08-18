@@ -24,9 +24,12 @@ public interface OrderMapper {
         dto.setDeliveryId(order.getDeliveryId());
         dto.setState(StateEnum.fromValue(order.getStatus().name()));
 
-        dto.setProductPrice(order.getTotalPrice().subtract(order.getDeliveryPrice()).subtract(order.getFee()));
-        dto.setDeliveryPrice(order.getDeliveryPrice());
-        dto.setTotalPrice(order.getTotalPrice());
+        if (order.getTotalPrice() != null) {
+            dto.setProductPrice(
+                order.getTotalPrice().subtract(order.getDeliveryPrice()).subtract(order.getFee()));
+            dto.setDeliveryPrice(order.getDeliveryPrice());
+            dto.setTotalPrice(order.getTotalPrice());
+        }
 
         Map<String, Long> products = order.getItems().stream().collect(
             Collectors.toMap(item -> item.getProductId().toString(), OrderItem::getQuantity));
