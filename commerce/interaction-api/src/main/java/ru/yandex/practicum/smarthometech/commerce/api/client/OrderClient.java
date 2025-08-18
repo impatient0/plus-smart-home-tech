@@ -35,7 +35,7 @@ public interface OrderClient {
     OrderDto setPaymentFailed(@RequestBody UUID orderId);
 
     @PostMapping("/delivery")
-    OrderDto setAsDelivered(@RequestBody UUID orderId);
+    OrderDto initiateDelivery(@RequestBody UUID orderId);
 
     @PostMapping("/delivery/successful")
     OrderDto setDeliverySuccessful(@RequestBody UUID orderId);
