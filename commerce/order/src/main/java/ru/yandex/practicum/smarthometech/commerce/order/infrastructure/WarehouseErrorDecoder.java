@@ -5,7 +5,7 @@ import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDto;
-import ru.yandex.practicum.smarthometech.commerce.api.exception.*; // Import shared exceptions
+import ru.yandex.practicum.smarthometech.commerce.api.exception.*;
 
 import ru.yandex.practicum.smarthometech.commerce.api.utility.ErrorParser;
 

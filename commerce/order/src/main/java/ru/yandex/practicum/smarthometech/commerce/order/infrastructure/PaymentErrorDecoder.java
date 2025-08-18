@@ -5,7 +5,7 @@ import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDto;
-import ru.yandex.practicum.smarthometech.commerce.api.exception.PaymentClientException; // A new base exception
+import ru.yandex.practicum.smarthometech.commerce.api.exception.PaymentClientException;
 
 import ru.yandex.practicum.smarthometech.commerce.api.utility.ErrorParser;
 

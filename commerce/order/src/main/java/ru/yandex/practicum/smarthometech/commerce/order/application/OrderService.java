@@ -64,7 +64,6 @@ public class OrderService {
             order.addItem(item);
         }
 
-        // Save the initial order to get its generated ID
         Order savedOrder = orderRepository.save(order);
         UUID orderId = savedOrder.getOrderId();
         log.info("Order {} created with status NEW.", orderId);
