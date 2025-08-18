@@ -23,7 +23,7 @@ public class OrderController implements OrderClient {
 
     @Override
     @PutMapping
-    @ResponseStatus(HttpStatus.CREATED) // Use 201 CREATED for new resource creation
+    @ResponseStatus(HttpStatus.CREATED)
     public OrderDto createNewOrder(@RequestBody CreateNewOrderRequest createNewOrderRequest, @RequestParam("username") String username) {
         return orderService.createNewOrder(createNewOrderRequest, username);
     }
@@ -100,13 +100,13 @@ public class OrderController implements OrderClient {
     }
 
     @Override
-    @PostMapping
+    @PostMapping("/calculate/total")
     public OrderDto calculateTotalCost(@RequestBody UUID orderId) {
         throw new UnsupportedOperationException("Total cost is calculated during the order creation process.");
     }
 
     @Override
-    @PostMapping
+    @PostMapping("/calculate/delivery")
     public OrderDto calculateDeliveryCost(@RequestBody UUID orderId) {
         throw new UnsupportedOperationException("Delivery cost is calculated during the order creation process.");
     }
