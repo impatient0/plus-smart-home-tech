@@ -44,32 +44,38 @@ public class OrderController implements OrderClient {
 
     @Override
     @PostMapping("/{orderId}/payment-successful")
-    public OrderDto setPaymentSuccessful(@PathVariable("orderId") UUID orderId) {
+    public OrderDto setPaymentSuccessful(@RequestBody UUID orderId) {
         return orderService.setPaymentSuccessful(orderId);
     }
 
     @Override
     @PostMapping("/{orderId}/payment-failed")
-    public OrderDto setPaymentFailed(@PathVariable("orderId") UUID orderId) {
+    public OrderDto setPaymentFailed(@RequestBody UUID orderId) {
         return orderService.setPaymentFailed(orderId);
     }
 
     @Override
     @PostMapping("/{orderId}/assembly-failed")
-    public OrderDto setAssemblyFailed(@PathVariable("orderId") UUID orderId) {
+    public OrderDto setAssemblyFailed(@RequestBody UUID orderId) {
         return orderService.setAssemblyFailed(orderId);
     }
 
     @Override
     @PostMapping("/{orderId}/delivery-successful")
-    public OrderDto setDeliverySuccessful(@PathVariable("orderId") UUID orderId) {
+    public OrderDto setDeliverySuccessful(@RequestBody UUID orderId) {
         return orderService.setDeliverySuccessful(orderId);
     }
 
     @Override
     @PostMapping("/{orderId}/delivery-failed")
-    public OrderDto setDeliveryFailed(@PathVariable("orderId") UUID orderId) {
+    public OrderDto setDeliveryFailed(@RequestBody UUID orderId) {
         return orderService.setDeliveryFailed(orderId);
+    }
+
+    @Override
+    @PostMapping("/completed")
+    public OrderDto markAsCompleted(@RequestBody UUID orderId) {
+        return orderService.markAsCompleted(orderId);
     }
 
 
@@ -85,12 +91,6 @@ public class OrderController implements OrderClient {
     @PostMapping("/assembly")
     public OrderDto startAssembly(@RequestBody UUID orderId) {
         throw new UnsupportedOperationException("Assembly is initiated as part of the order creation process. This endpoint is not supported.");
-    }
-
-    @Override
-    @PostMapping("/completed")
-    public OrderDto markAsCompleted(@RequestBody UUID orderId) {
-        throw new UnsupportedOperationException("Order is completed automatically after successful delivery. This endpoint is not supported.");
     }
 
     @Override
