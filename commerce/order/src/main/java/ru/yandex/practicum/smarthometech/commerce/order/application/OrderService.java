@@ -15,11 +15,9 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.order.CreateNewOrderRe
 import ru.yandex.practicum.smarthometech.commerce.api.dto.order.OrderDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.order.ProductReturnRequest;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.AssemblyProductsForOrderRequest;
-import ru.yandex.practicum.smarthometech.commerce.api.exception.DeliveryClientException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.InsufficientQuantityException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.OrderCreationException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.OrderNotFoundException;
-import ru.yandex.practicum.smarthometech.commerce.api.exception.PaymentClientException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.api.mapper.CartApiMapper;
 import ru.yandex.practicum.smarthometech.commerce.api.mapper.AddressApiMapper;
@@ -158,6 +156,8 @@ public class OrderService {
         log.info("Product return processed for order {}.", order.getOrderId());
         return orderMapper.toDto(savedOrder);
     }
+
+
 
     // --- callbacks ---
 

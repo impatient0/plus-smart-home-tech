@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDto;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.PaymentClientException; // A new base exception
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Optional;
+import ru.yandex.practicum.smarthometech.commerce.api.utility.ErrorParser;
 
 @Slf4j
 public class PaymentErrorDecoder implements ErrorDecoder {
@@ -18,7 +16,7 @@ public class PaymentErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
-        ApiErrorDto errorDto = parseErrorDto(response).orElse(null);
+        ApiErrorDto errorDto = ErrorParser.parseErrorDto(response).orElse(null);
         String message = errorDto != null ? errorDto.getMessage() : "No details provided";
         String errorCode = errorDto != null ? errorDto.getErrorCode() : "UNKNOWN_ERROR";
 
@@ -26,15 +24,5 @@ public class PaymentErrorDecoder implements ErrorDecoder {
             response.status(), methodKey, errorCode, message);
 
         return new PaymentClientException("Error from Payment service: " + message);
-    }
-
-    private Optional<ApiErrorDto> parseErrorDto(Response response) {
-        if (response.body() == null) return Optional.empty();
-        try (InputStream bodyIs = response.body().asInputStream()) {
-            return Optional.of(objectMapper.readValue(bodyIs, ApiErrorDto.class));
-        } catch (IOException e) {
-            log.error("Failed to decode error response body from Payment service", e);
-            return Optional.empty();
-        }
     }
 }
