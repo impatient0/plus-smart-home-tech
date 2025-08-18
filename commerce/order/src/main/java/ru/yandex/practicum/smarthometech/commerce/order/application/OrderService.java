@@ -19,8 +19,6 @@ import ru.yandex.practicum.smarthometech.commerce.api.exception.InsufficientQuan
 import ru.yandex.practicum.smarthometech.commerce.api.exception.OrderCreationException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.OrderNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
-import ru.yandex.practicum.smarthometech.commerce.api.mapper.CartApiMapper;
-import ru.yandex.practicum.smarthometech.commerce.api.mapper.AddressApiMapper;
 import ru.yandex.practicum.smarthometech.commerce.order.domain.Order;
 import ru.yandex.practicum.smarthometech.commerce.order.domain.OrderItem;
 import ru.yandex.practicum.smarthometech.commerce.order.domain.OrderRepository;

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.smarthometech.commerce.api.mapper;
+package ru.yandex.practicum.smarthometech.commerce.order.application;
 
 import org.mapstruct.Mapper;
 
