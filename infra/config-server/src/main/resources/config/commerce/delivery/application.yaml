@@ -19,3 +19,15 @@ management:
     web:
       exposure:
         include: "health,info"
+
+delivery:
+  cost:
+    base: 5.0
+    multiplier:
+      fragile: 0.2
+      weight: 0.3
+      volume: 0.2
+      base: 0.2
+      warehouse:
+        - 1.0
+        - 2.0

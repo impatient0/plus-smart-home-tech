@@ -10,6 +10,7 @@ import ru.yandex.practicum.smarthometech.commerce.api.dto.delivery.DeliveryDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.order.OrderDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.ShippedToDeliveryRequest;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.DeliveryNotFoundException;
+import ru.yandex.practicum.smarthometech.commerce.delivery.application.config.DeliveryCostProperties;
 import ru.yandex.practicum.smarthometech.commerce.delivery.domain.Delivery;
 import ru.yandex.practicum.smarthometech.commerce.delivery.domain.DeliveryRepository;
 import ru.yandex.practicum.smarthometech.commerce.delivery.domain.DeliveryStatus;
@@ -26,6 +27,8 @@ public class DeliveryService {
     private final DeliveryMapper deliveryMapper;
     private final OrderClient orderClient;
     private final WarehouseClient warehouseClient;
+
+    private final DeliveryCostProperties costProperties;
 
     @Transactional
     public DeliveryDto planDelivery(DeliveryDto deliveryDto) {
@@ -46,18 +49,18 @@ public class DeliveryService {
         Delivery delivery = deliveryRepository.findByOrderId(orderDto.getOrderId())
             .orElseThrow(() -> new DeliveryNotFoundException(orderDto.getOrderId()));
 
-        BigDecimal baseCost = new BigDecimal("5.0");
-        BigDecimal cost = new BigDecimal("5.0");
+        BigDecimal baseCost = costProperties.getBase();
+        BigDecimal cost = costProperties.getBase();
 
         String fromStreet = delivery.getFromStreet();
         if (fromStreet != null && fromStreet.contains("ADDRESS_2")) {
-            cost = cost.add(baseCost.multiply(BigDecimal.valueOf(2)));
+            cost = cost.add(baseCost.multiply(costProperties.getMultiplier().getWarehouse().get(1)));
         } else {
-            cost = cost.add(baseCost.multiply(BigDecimal.valueOf(1)));
+            cost = cost.add(baseCost.multiply(costProperties.getMultiplier().getWarehouse().get(0)));
         }
 
         if (Boolean.TRUE.equals(orderDto.getFragile())) {
-            cost = cost.add(cost.multiply(new BigDecimal("0.2")));
+            cost = cost.add(cost.multiply(costProperties.getMultiplier().getFragile()));
         }
 
         BigDecimal deliveryWeight = (orderDto.getDeliveryWeight() != null)
@@ -68,12 +71,12 @@ public class DeliveryService {
             ? BigDecimal.valueOf(orderDto.getDeliveryVolume())
             : BigDecimal.ZERO;
 
-        cost = cost.add(deliveryWeight.multiply(new BigDecimal("0.3")));
-        cost = cost.add(deliveryVolume.multiply(new BigDecimal("0.2")));
+        cost = cost.add(deliveryWeight.multiply(costProperties.getMultiplier().getWeight()));
+        cost = cost.add(deliveryVolume.multiply(costProperties.getMultiplier().getVolume()));
 
         String toStreet = delivery.getToStreet();
         if (fromStreet != null && toStreet != null && !fromStreet.equals(toStreet)) {
-            cost = cost.add(cost.multiply(new BigDecimal("0.2")));
+            cost = cost.add(cost.multiply(costProperties.getMultiplier().getBase()));
         }
 
         log.info("Calculated delivery cost for orderId {}: {}", orderDto.getOrderId(), cost);
