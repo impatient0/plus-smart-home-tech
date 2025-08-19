@@ -1,6 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.cart.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.Objects;
@@ -16,13 +17,16 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shopping_cart_id", nullable = false)
     private ShoppingCart shoppingCart;
 
+    @NotNull
     @Column(name = "product_id", nullable = false)
     private UUID productId;
 
+    @NotNull
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
@@ -31,14 +35,14 @@ public class CartItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CartItem that = (CartItem) o;
-        return Objects.equals(this.getProductId(), that.getProductId()) &&
-            Objects.equals(this.getShoppingCart() != null ? this.getShoppingCart().getShoppingCartId() : null,
-                that.getShoppingCart() != null ? that.getShoppingCart().getShoppingCartId() : null);
+        return Objects.equals(this.productId, that.productId) && Objects.equals(
+            this.shoppingCart != null ? this.shoppingCart.getShoppingCartId() : null,
+            that.shoppingCart != null ? that.shoppingCart.getShoppingCartId() : null);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getShoppingCart() != null ? this.getShoppingCart().getShoppingCartId() : null,
-            this.getProductId());
+        return Objects.hash(this.shoppingCart != null ? this.shoppingCart.getShoppingCartId() : null,
+            this.productId);
     }
 }

@@ -12,5 +12,7 @@ public interface WarehouseRepository {
 
     WarehouseItem save(WarehouseItem warehouseItem);
 
+    List<WarehouseItem> saveAll(Iterable<WarehouseItem> warehouseItems);
+
     boolean existsById(UUID productId);
 }

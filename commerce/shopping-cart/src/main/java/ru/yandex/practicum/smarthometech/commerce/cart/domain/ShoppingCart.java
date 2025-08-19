@@ -1,6 +1,7 @@
 package ru.yandex.practicum.smarthometech.commerce.cart.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.HashSet;
@@ -19,13 +20,16 @@ public class ShoppingCart {
     @Column(name = "shopping_cart_id")
     private UUID shoppingCartId;
 
+    @NotNull
     @Column(name = "username", nullable = false)
     private String username;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private CartStatus status = CartStatus.ACTIVE;
 
+    @NotNull
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<CartItem> items = new HashSet<>();
 

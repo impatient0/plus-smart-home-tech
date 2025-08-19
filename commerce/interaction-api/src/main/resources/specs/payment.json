@@ -1,0 +1,239 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Smart Home Technologies API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://192.168.1.96:51887",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Платежный шлюз",
+      "description": "API для расчёта, проведения оплат"
+    }
+  ],
+  "paths": {
+    "/api/v1/payment": {
+      "post": {
+        "tags": [
+          "Платежный шлюз"
+        ],
+        "description": "Формирование оплаты для заказа (переход в платежный шлюз).",
+        "operationId": "payment",
+        "requestBody": {
+          "description": "Заказ для формирования оплаты.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./order.json#/components/schemas/OrderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Сформированная оплата заказа (переход в платежный шлюз)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Недостаточно информации в заказе для расчёта",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payment/totalCost": {
+      "post": {
+        "tags": [
+          "Платежный шлюз"
+        ],
+        "description": "Расчёт полной стоимости заказа.",
+        "operationId": "getTotalCost",
+        "requestBody": {
+          "description": "Заказ для расчёта.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./order.json#/components/schemas/OrderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Полная стоимость заказа",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Недостаточно информации в заказе для расчёта",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payment/successful": {
+      "post": {
+        "tags": [
+          "Платежный шлюз"
+        ],
+        "description": "Метод для эмуляции успешной оплаты в платежного шлюза.",
+        "operationId": "paymentSuccess",
+        "requestBody": {
+          "description": "Идентификатор платежа.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "404": {
+            "description": "Заказ не найден",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payment/productCost": {
+      "post": {
+        "tags": [
+          "Платежный шлюз"
+        ],
+        "description": "Расчёт стоимости товаров в заказе.",
+        "operationId": "productCost",
+        "requestBody": {
+          "description": "Заказ для расчёта.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./order.json#/components/schemas/OrderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Расчёт стоимости товаров в заказе",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Недостаточно информации в заказе для расчёта",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payment/failed": {
+      "post": {
+        "tags": [
+          "Платежный шлюз"
+        ],
+        "description": "Метод для эмуляции отказа в оплате платежного шлюза.",
+        "operationId": "paymentFailed",
+        "requestBody": {
+          "description": "Идентификатор платежа.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "404": {
+            "description": "Заказ не найден",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "./common.json#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PaymentDto": {
+        "type": "object",
+        "properties": {
+          "paymentId": {
+            "type": "string",
+            "description": "Идентификатор оплаты.",
+            "format": "uuid"
+          },
+          "totalPayment": {
+            "type": "number",
+            "description": "Общая стоимость."
+          },
+          "deliveryTotal": {
+            "type": "number",
+            "description": "Стоимость доставки."
+          },
+          "feeTotal": {
+            "type": "number",
+            "description": "Стоимость налога."
+          }
+        }
+      }
+    }
+  }
+}

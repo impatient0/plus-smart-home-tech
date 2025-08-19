@@ -1,0 +1,33 @@
+server:
+  port: 0
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/commerce_delivery
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    ru.yandex.practicum: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+
+delivery:
+  cost:
+    base: 5.0
+    multiplier:
+      fragile: 0.2
+      weight: 0.3
+      volume: 0.2
+      base: 0.2
+      warehouse:
+        - 1.0
+        - 2.0

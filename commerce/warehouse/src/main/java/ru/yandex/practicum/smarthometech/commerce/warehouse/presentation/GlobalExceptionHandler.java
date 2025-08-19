@@ -1,8 +1,6 @@
 package ru.yandex.practicum.smarthometech.commerce.warehouse.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.time.OffsetDateTime;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,9 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.common.ApiErrorDto;
-import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
+import ru.yandex.practicum.smarthometech.commerce.api.exception.BookingNotFoundException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.InsufficientQuantityException;
 import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductAlreadyExistsException;
+import ru.yandex.practicum.smarthometech.commerce.api.exception.ProductNotFoundException;
+
+import java.time.OffsetDateTime;
+import java.util.Map;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ApiErrorDto> handleProductNotFoundException(ProductNotFoundException ex, HttpServletRequest request) {
+        log.warn("Handling ProductNotFoundException for product ID '{}': {}", ex.getProductId(), ex.getMessage());
 
         ApiErrorDto errorDto = new ApiErrorDto()
             .timestamp(OffsetDateTime.now())
@@ -35,12 +38,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductAlreadyExistsException.class)
     public ResponseEntity<ApiErrorDto> handleProductAlreadyExistsException(ProductAlreadyExistsException ex, HttpServletRequest request) {
+        log.warn("Handling ProductAlreadyExistsException for product ID '{}': {}", ex.getProductId(), ex.getMessage());
 
         ApiErrorDto errorDto = new ApiErrorDto()
             .timestamp(OffsetDateTime.now())
             .status(HttpStatus.BAD_REQUEST.value())
             .errorCode("PRODUCT_ALREADY_EXISTS_IN_WAREHOUSE")
-            .message(String.format("Product with ID '%s' is already registered in the warehouse.", ex.getProductId()))
+            .message(String.format("Product with ID '%s' already exists.", ex.getProductId()))
             .path(request.getRequestURI())
             .details(Map.of("productId", ex.getProductId().toString()));
 
@@ -49,14 +53,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InsufficientQuantityException.class)
     public ResponseEntity<ApiErrorDto> handleInsufficientQuantityException(InsufficientQuantityException ex, HttpServletRequest request) {
+        log.warn("Handling InsufficientQuantityException for product '{}': Requested {}, available {}",
+            ex.getProductId(), ex.getRequestedQuantity(), ex.getAvailableQuantity());
 
         ApiErrorDto errorDto = new ApiErrorDto()
             .timestamp(OffsetDateTime.now())
             .status(HttpStatus.BAD_REQUEST.value())
             .errorCode("INSUFFICIENT_QUANTITY_IN_WAREHOUSE")
-            .message(String.format(
-                "Insufficient stock for product ID '%s'. Requested: %d, Available: %d.",
-                ex.getProductId(), ex.getRequestedQuantity(), ex.getAvailableQuantity()))
+            .message(String.format("Insufficient stock for product ID '%s'.", ex.getProductId()))
             .path(request.getRequestURI())
             .details(Map.of(
                 "productId", ex.getProductId().toString(),
@@ -67,14 +71,30 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BookingNotFoundException.class)
+    public ResponseEntity<ApiErrorDto> handleBookingNotFound(BookingNotFoundException ex, HttpServletRequest request) {
+        log.warn("Handling BookingNotFoundException: {}", ex.getMessage());
+
+        ApiErrorDto errorDto = new ApiErrorDto()
+            .timestamp(OffsetDateTime.now())
+            .status(HttpStatus.NOT_FOUND.value())
+            .errorCode("ORDER_BOOKING_NOT_FOUND")
+            .message("A booking for the specified order could not be found.")
+            .path(request.getRequestURI())
+            .details(Map.of("orderId", ex.getOrderId().toString()));
+
+        return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorDto> handleGenericException(Exception ex, HttpServletRequest request) {
+        log.error("Handling unexpected exception in warehouse service", ex);
 
         ApiErrorDto errorDto = new ApiErrorDto()
             .timestamp(OffsetDateTime.now())
             .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
             .errorCode("INTERNAL_SERVER_ERROR")
-            .message("An unexpected error occurred.")
+            .message("An unexpected internal error occurred.")
             .path(request.getRequestURI())
             .details(Map.of("originalMessage", ex.getMessage()));
 

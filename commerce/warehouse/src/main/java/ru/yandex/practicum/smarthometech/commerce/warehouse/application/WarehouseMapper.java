@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.DimensionDto;
 import ru.yandex.practicum.smarthometech.commerce.api.dto.warehouse.NewProductInWarehouseRequest;
+import ru.yandex.practicum.smarthometech.commerce.warehouse.domain.BookedItem;
 import ru.yandex.practicum.smarthometech.commerce.warehouse.domain.WarehouseItem;
 
 @Mapper(componentModel = "spring")
@@ -22,4 +23,9 @@ public interface WarehouseMapper {
     @Mapping(target = "height", source = "heightM")
     @Mapping(target = "depth", source = "depthM")
     DimensionDto warehouseItemToDimensionDto(WarehouseItem item);
+
+    @Mapping(target = "quantity", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "orderBooking", ignore = true)
+    BookedItem toBookedItem(WarehouseItem item);
 }

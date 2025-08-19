@@ -4,6 +4,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import ru.yandex.practicum.smarthometech.commerce.store.application.ShoppingStor
 @RestController
 @RequestMapping("/api/v1/shopping-store")
 @RequiredArgsConstructor
+@Validated
 public class ShoppingStoreController implements ShoppingStoreClient {
 
     private final ShoppingStoreService shoppingStoreService;
